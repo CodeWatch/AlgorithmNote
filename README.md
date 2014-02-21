@@ -7,7 +7,8 @@ AlgorithmNote是一个主题分类的用于记录、整理和分享算法思路�
 Chapters
 ------------
 1.Permutations and Combinations$keywords Permutation, Combination  
-2.String dp and array dp$keywords: dp
+2.String dp and array dp$keywords dp
+3.Sum$keywords Sum, Tree Sum
 Core contributors
 ------------
 [@sc703bupt](https://github.com/sc703bupt)
