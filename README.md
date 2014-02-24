@@ -10,6 +10,8 @@ Chapters
 2.String dp and array dp$keywords dp    
 3.Sum$keywords Vector Sum, Tree Sum, Other Sum  
 4.Search Array$keywords search
+5.NA
+6.Tree transform and Tree search&keywords tree, transform, search
 Core contributors
 ------------
 [@sc703bupt](https://github.com/sc703bupt)
