@@ -8,7 +8,7 @@ Chapters
 ------------
 1.Permutations and Combinations$keywords Permutation, Combination  
 2.String dp and array dp$keywords dp    
-3.Sum$keywords Vector Sum, Tree Sum  
+3.Sum$keywords Vector Sum, Tree Sum, Other Sum  
 4.Search Array$keywords search
 Core contributors
 ------------
