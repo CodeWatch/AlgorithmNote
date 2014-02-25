@@ -6,7 +6,7 @@ AlgorithmNote是一个按照主题分类的用于记录、整理和分享算法�
 
 Chapters
 ------------
-0.[Tricky Problems](0.Tricky Problems)  
+0.[Tricky Problems](0.Tricky Problems.md)  
 1.[Permutations and Combinations](1.Permutations and Combinations$keywords Permutation, Combination.md)$keywords Permutation, Combination  
 2.[String dp and array dp](2.String dp and Array dp$keywords dp.md)$keywords dp    
 3.[Sum](3.Sum$keywords Vector Sum, Tree Sum, Other Sum.md)$keywords Vector Sum, Tree Sum, Other Sum  
