@@ -2,7 +2,7 @@ AlgorithmNote
 =============
 Introduction
 ------------
-AlgorithmNote是一个按照主题分类的用于记录、整理和分享算法思路和解法Github项目，文中涉及的题目来自Leetcode、微软100题、编程之美、OJ、剑指offer及各大算法博客等。
+AlgorithmNote是一个按照主题分类的用于记录、整理和分享算法思路和解法Github项目，旨在分享有趣，具有思维性的算法问题和解答方法。
 
 Chapters
 ------------
