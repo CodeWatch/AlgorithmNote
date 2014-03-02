@@ -12,7 +12,8 @@ Chapters
 3.[Sum](3.Sum$keywords Vector Sum, Tree Sum, Other Sum.md)$keywords Vector Sum, Tree Sum, Other Sum  
 4.[Search Array](4.Search Array$keywords search.md)$keywords search  
 5.[Graph](5.Graph&keywords graph.md)$keywords graph  
-6.[Tree transform and Tree search](6.Tree&keywords tree, transform, visit.md)$keywords tree, transform, search
+6.[Tree transform and Tree search](6.Tree&keywords tree, transform, visit.md)$keywords tree, transform, search  
+7.[Area Computation](7.Area Computation$keyword stack.md)$keyword stack
 Core contributors
 ------------
 [@sc703bupt](https://github.com/sc703bupt)
