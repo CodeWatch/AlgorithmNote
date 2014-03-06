@@ -14,6 +14,9 @@ Chapters
 5.[Graph](5.Graph&keywords graph.md)$keywords graph  
 6.[Tree transform and Tree search](6.Tree&keywords tree, transform, visit.md)$keywords tree, transform, search  
 7.[Area Computation](7.Area Computation$keyword stack.md)$keyword stack
+8.[Overwrite](8.Overwrite$keywords overwrite.md)$keywords overwrite
+9.[Sliding window](9.Sliding window$keywords window.md)$keywords window
+10.[Big Data Processing](10. Big Data Processing$keywords Bigdata.md)$keywords Bigdata
 Core contributors
 ------------
 [@sc703bupt](https://github.com/sc703bupt)
