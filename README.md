@@ -17,7 +17,7 @@ Chapters
 8.[Rewrite STL](8.Rewrite STL$keywords Rewrite.md)$keywords Rewrite  
 9.[Sliding window](9.Sliding window$keywords window.md)$keywords window  
 10.[Big Data Processing](10. Big Data Processing$keywords Bigdata.md)$keywords Bigdata  
-11.[String$keywords string](11.String$keywords string.md)  
+11.[String](11.String$keywords string.md)$keywords string  
 Core contributors
 ------------
 [@sc703bupt](https://github.com/sc703bupt)
