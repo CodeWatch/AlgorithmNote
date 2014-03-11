@@ -18,6 +18,9 @@ Chapters
 9.[Sliding window](9.Sliding window$keywords window.md)$keywords window  
 10.[Big Data Processing](10. Big Data Processing$keywords Bigdata.md)$keywords Bigdata  
 11.[String](11.String$keywords string.md)$keywords string  
+12.[Greedy](12.Greedy$keywords greedy.md)$keywords greedy  
+13.[Java](Java$keywords java.md)$keywords java    
+ 
 Core contributors
 ------------
 [@sc703bupt](https://github.com/sc703bupt)
