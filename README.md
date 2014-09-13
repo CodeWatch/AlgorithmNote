@@ -27,5 +27,5 @@ Core contributors
 [@popolou](https://github.com/popolou)
 Contact us
 ------------
-欢迎提出意见和建议到sc1_1@bupt.edu.cn .
+欢迎提出意见和建议到sc1_1@163.com .
 
