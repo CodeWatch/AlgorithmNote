@@ -1,10 +1,12 @@
 ##Array & String
 Index:  
 -[Leetcode:single number II](#Anchor1)  
--[Combination](#Anchor2)
+-[Find Reverse Pair](#Anchor2)  
+-[Find Min K](#Anchor3)  
+-[Find Number occurs half times](#Anchor4)
 
 <a name="Anchor1" id="Anchor1"></a>
--[Leetcode:single number II](http://oj.leetcode.com/problems/single-number-ii/)  
+-**[Leetcode:single number II](http://oj.leetcode.com/problems/single-number-ii/)**    
   
 两个变量，ones和twos，顺序遍历并且求出异或值，ones表示异或值哪些位 比特1出现一次，twos表示异或值哪些位 比特1出现两次，当异或值的某些位 比特1出现三次的时候，就要对其进行清除，这样就能保证最后得到的ones就是出现一次的数  
 ```java
@@ -107,3 +109,163 @@ vector<int> twoSingleNumber(int A[], int n){
 singleNumberSpecial()先找到两个数字不同的bit位，然后利用该bit位将数组分成两组，再应用之前的方法求解。
 
 <a name="Anchor2" id="Anchor2"></a>
+-**Find Reverse Pair**    
+问题描述：在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对的总数。      
+使用普通的比较时间复杂度是n方。这里介绍一种复杂度为nlogn的方法。该方法要借助归并排序，即将数组分为两部分分别排序，然后merge。之后在对两个子数组进行merge的时候，去比较子数组1的当前元素和子数组2的当前元素，若1大于2，则说明1后面的元素都大于2，所以都为逆序对，将这些数加入结果集。  
+```java
+public class Main {
+    static long count = 0;
+ 
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        while (in.hasNext()) {
+            int n = in.nextInt();
+            int[] a = new int[n];
+            for (int i = 0; i < n; i++)
+                a[i] = in.nextInt();
+            count = 0;
+            mergeSort(a);
+            System.out.println(count);
+        }
+    }
+ 
+    // 将有二个有序数列a[first...mid]和a[mid...last]合并。
+    static void mergearray(int a[], int first, int mid, int last, int temp[]) {
+        int i = first, j = mid + 1;
+        int m = mid, n = last;
+        int k = 0;
+        while (i <= m && j <= n) {
+            if (a[i] > a[j]) {
+                // 左数组比右数组大
+                temp[k++] = a[j++];
+                // 因为如果a[i]此时比右数组的当前元素a[j]大，
+                // 那么左数组中a[i]后面的元素就都比a[j]大
+                // 【因为数组此时是有序数组】
+                count += mid - i + 1;
+            } else {
+                temp[k++] = a[i++];
+            }
+        }
+        while (i <= m) {
+            temp[k++] = a[i++];
+        }
+        while (j <= n) {
+            temp[k++] = a[j++];
+        }
+        for (i = 0; i < k; i++)
+            a[first + i] = temp[i];
+    }
+ 
+    static void mergesort(int a[], int first, int last, int temp[]) {
+        if (first < last) {
+            int mid = (first + last) / 2;
+            mergesort(a, first, mid, temp); // 左边有序
+            mergesort(a, mid + 1, last, temp); // 右边有序
+            mergearray(a, first, mid, last, temp); // 再将二个有序数列合并
+        }
+    }
+ 
+    static void mergeSort(int a[]) {
+        int[] p = new int[a.length];
+        mergesort(a, 0, a.length - 1, p);
+    }
+}
+```
+
+<a name="Anchor3" id="Anchor3"></a>
+-**Find Min K**  
+问题描述：最小的K个数:输入n个整数，找出其中最小的K个数,并按从小到大顺序打印。   
+
+Solution 1:
+在这道题中我们利用快速排序的思想，每次都将范围内第一个数作为枢轴，找到前面大于枢轴值的数和后面小于枢轴值的数交换，最后将枢轴值和小于枢轴值的最后一个数交换，完成快速排序。现在数组被分成了两部分，一边小于枢轴值，一边大于枢轴值，等于枢轴值得中间数组下标为t。若k>t，则说明前k个数在后面的子数组里也有，则要对后面排序；若不大于，则不用管后面的子数组。时间复杂度O(n)。  
+```cpp
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+using namespace std;
+#define LL long long
+void swap(LL *a, LL *b){
+    LL tmp=*a;
+    *a=*b;
+    *b=tmp;
+}
+ 
+int partition_arr(int low,int high,LL *arr,const int k){
+    if(low>=high)
+        return 0;
+    LL tmp=arr[low];
+    int i=low,j=high+1;
+    LL pivot=arr[low];
+    while(1){
+        while(arr[++i]<pivot);
+        while(arr[--j]>pivot);
+        if(i<j)
+            swap(arr[i],arr[j]);
+        else
+            break;
+         
+    }
+    swap(arr[low],arr[j]);
+    if(low<j-1) partition_arr(low,j-1,arr,k);
+    if(j+1<high&&j+1<=k) partition_arr(j+1,high,arr,k);
+    return 0;
+}
+int main()
+{
+    int n,k,i;
+    while(~scanf("%d%d",&n,&k)){
+        LL *arr=new LL [n];
+        for(i=0;i<n;i++)
+            scanf("%lld",&arr[i]);
+        partition_arr(0,n-1,arr,k-1);
+        if(n>=k){
+            printf("%d",arr[0]);
+            for(i=1;i<k;i++)
+                printf(" %lld",arr[i]);
+            printf("\n");
+        }
+    }
+    return 0;
+}
+```
+
+Solution 2:
+//TODO（堆排序）
+
+<a name="Anchor4" id="Anchor4"></a>
+-**Find Number occurs half times**   
+问题描述：找出出现次数刚好是一半的数字。有N个数，其中有一个数刚好出现一半次数，要求在线性时间内求出这个数。  
+首先，该数字占总数的一半（假设为x），说明总数必为偶数；其次，最后一个元素或者是x，或者不是x，因此只要在扫描数组的时候每一个元素都与最后一个元素做比较，如果相等则最后一个元素的个数加1，否则不处理。如果最后一个元素的个数为N/2,（N为数组元素个数）则它就是x，否则x就是前面N-1个元素中选出的candidate。  
+```cpp
+int MoreThanHalf(int a[], int N)
+{
+    int sum1 = 0;//最后一个元素的个数
+    int sum2 = 0;
+    int candidate;
+    int i;
+    for(i=0;i<N-1;i++)//扫描前N-1个元素
+    {
+        if(a == a[N-1])//判断当前元素与最后一个是否相等
+        sum1++;
+        if(sum2 == 0)
+        {
+             candidate = a;
+             sum2++;
+        }
+        else
+        {
+             if(a == candidate)
+                 sum2++;
+             else
+                 sum2--;
+        }
+     }
+
+     if((sum1+1) == N/2)
+         return a[N-1];
+     else
+         return candidate;
+}
+```
+
