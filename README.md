@@ -7,8 +7,7 @@ AlgorithmNote is a knowledge sharing github page, mainly has three parts: algori
 Anyone is welcomed and encouraged to send pull request.
 Chapters
 ------------
-Algorithm
-~~~~~~~~~
+####Algorithm
 1. Array & String
 2. Dynamic Programming  
 3. Greedy Strategy  
@@ -16,11 +15,11 @@ Algorithm
 5. BFS & DFS  
 6. STL related  
 7. Others  
-Engineering
-~~~~~~~~~~
+
+####Engineering
 1. Website construction  
-Basic Knowledge
-~~~~~~~~~~
+
+####Basic Knowledge
 1. Basic Java Concepts  
 Core contributors
 ------------
