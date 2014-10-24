@@ -21,6 +21,7 @@ Chapters
 
 ####Basic Knowledge
 1. Basic Java Concepts  
+
 Core contributors
 ------------
 [@sc703bupt](https://github.com/sc703bupt)
