@@ -1,10 +1,10 @@
 ##Array & String
 Index:  
-1.[single number II](#Anchor1) 
-2.[Combination](#Anchor2)
+-[Leetcode:single number II](#Anchor1)  
+-[Combination](#Anchor2)
 
 <a name="Anchor1" id="Anchor1"></a>
-1.[Leetcode:single number II](http://oj.leetcode.com/problems/single-number-ii/)  
+-[Leetcode:single number II](http://oj.leetcode.com/problems/single-number-ii/)  
   
 两个变量，ones和twos，顺序遍历并且求出异或值，ones表示异或值哪些位 比特1出现一次，twos表示异或值哪些位 比特1出现两次，当异或值的某些位 比特1出现三次的时候，就要对其进行清除，这样就能保证最后得到的ones就是出现一次的数  
 ```java
