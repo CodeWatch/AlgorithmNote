@@ -8,13 +8,13 @@ Anyone is welcomed and encouraged to send pull request.
 Chapters
 ------------
 ####Algorithm
-1. Array & String
-2. Dynamic Programming  
-3. Greedy Strategy  
-4. Tree & Linkedlist  
-5. BFS & DFS  
-6. STL related  
-7. Others  
+1. [Array & String](Array & String.md)
+2. [Dynamic Programming](Dynamic Programming.md)  
+3. [Greedy Strategy](Greedy Strategy.md)  
+4. [Tree & Linkedlist](Tree & Linkedlist.md)  
+5. [BFS & DFS](BFS & DFS.md)
+6. [STL related](STL related.md)  
+7. [Others](Others.md)  
 
 ####Engineering
 1. Website construction  
