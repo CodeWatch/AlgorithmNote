@@ -1,12 +1,14 @@
 ##Array & String
+<a name="AnchorIndex" id="AnchorIndex"></a>
 Index:  
 -[Leetcode:single number II](#Anchor1)  
 -[Find Reverse Pair](#Anchor2)  
 -[Find Min K](#Anchor3)  
 -[Find Number occurs half times](#Anchor4)
+-[Leetcode:Median of Two Sorted Arrays](#Anchor5)
 
 <a name="Anchor1" id="Anchor1"></a>
--**[Leetcode:single number II](http://oj.leetcode.com/problems/single-number-ii/)**    
+-**[Leetcode:single number II](http://oj.leetcode.com/problems/single-number-ii/)**([Back to Index](#AnchorIndex))    
   
 两个变量，ones和twos，顺序遍历并且求出异或值，ones表示异或值哪些位 比特1出现一次，twos表示异或值哪些位 比特1出现两次，当异或值的某些位 比特1出现三次的时候，就要对其进行清除，这样就能保证最后得到的ones就是出现一次的数  
 ```java
@@ -109,7 +111,7 @@ vector<int> twoSingleNumber(int A[], int n){
 singleNumberSpecial()先找到两个数字不同的bit位，然后利用该bit位将数组分成两组，再应用之前的方法求解。
 
 <a name="Anchor2" id="Anchor2"></a>
--**Find Reverse Pair**    
+-**Find Reverse Pair**([Back to Index](#AnchorIndex))    
 问题描述：在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对的总数。      
 使用普通的比较时间复杂度是n方。这里介绍一种复杂度为nlogn的方法。该方法要借助归并排序，即将数组分为两部分分别排序，然后merge。之后在对两个子数组进行merge的时候，去比较子数组1的当前元素和子数组2的当前元素，若1大于2，则说明1后面的元素都大于2，所以都为逆序对，将这些数加入结果集。  
 ```java
@@ -173,7 +175,7 @@ public class Main {
 ```
 
 <a name="Anchor3" id="Anchor3"></a>
--**Find Min K**  
+-**Find Min K**([Back to Index](#AnchorIndex))  
 问题描述：最小的K个数:输入n个整数，找出其中最小的K个数,并按从小到大顺序打印。   
 
 Solution 1:
@@ -234,7 +236,7 @@ Solution 2:
 //TODO（堆排序）
 
 <a name="Anchor4" id="Anchor4"></a>
--**Find Number occurs half times**   
+-**Find Number occurs half times**([Back to Index](#AnchorIndex))   
 问题描述：找出出现次数刚好是一半的数字。有N个数，其中有一个数刚好出现一半次数，要求在线性时间内求出这个数。  
 首先，该数字占总数的一半（假设为x），说明总数必为偶数；其次，最后一个元素或者是x，或者不是x，因此只要在扫描数组的时候每一个元素都与最后一个元素做比较，如果相等则最后一个元素的个数加1，否则不处理。如果最后一个元素的个数为N/2,（N为数组元素个数）则它就是x，否则x就是前面N-1个元素中选出的candidate。  
 ```cpp
@@ -268,4 +270,35 @@ int MoreThanHalf(int a[], int N)
          return candidate;
 }
 ```
+<a name="Anchor1" id="Anchor1"></a>
+-**[Leetcode:Median of Two Sorted Arrays](http://oj.leetcode.com/problems/median-of-two-sorted-arrays/)**(#AnchorIndex))    
+每次A B数组的k/2位置的元素进行比较，舍弃值较小的数所在数组的前k/2个数，如此迭代，这样每次能去除掉一半的元素，时间复杂度为O(log(m+n))。    
+```java
+class Solution {
+public:
 
+    double findMedianSortedArrays(int A[], int m, int B[], int n) {
+        int total = m + n;
+        if (total & 0x1)
+            return find_kth(A, m, B, n, total / 2 + 1);
+        else
+            return (find_kth(A, m, B, n, total / 2)
+                + find_kth(A, m, B, n, total / 2 + 1)) / 2;
+    }
+private:
+
+    static double find_kth(int A[], int m, int B[], int n, int k) {
+        //always assume that m is equal or smaller than n
+        if (m > n) return find_kth(B, n, A, m, k);
+        if (m == 0) return B[k - 1];
+        if (k == 1) return min(A[0], B[0]);
+        //divide k into two parts
+        int pa = min(k / 2, m), pb = k - pa;
+        if (A[pa - 1] < B[pb - 1])
+            return find_kth(A + pa, m - pa, B, n, k - pa);
+        else if (A[pa - 1] > B[pb - 1])
+            return find_kth(A, m, B + pb, n - pb, k - pb);
+        else
+            return A[pa - 1];
+    }
+};
