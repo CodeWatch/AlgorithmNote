@@ -4,7 +4,7 @@ Index:
 -[Leetcode:single number II](#Anchor1)  
 -[Find Reverse Pair](#Anchor2)  
 -[Find Min K](#Anchor3)  
--[Find Number occurs half times](#Anchor4)
+-[Find Number occurs half times](#Anchor4)  
 -[Leetcode:Median of Two Sorted Arrays](#Anchor5)
 
 <a name="Anchor1" id="Anchor1"></a>
@@ -179,7 +179,7 @@ public class Main {
 问题描述：最小的K个数:输入n个整数，找出其中最小的K个数,并按从小到大顺序打印。   
 
 Solution 1:
-在这道题中我们利用快速排序的思想，每次都将范围内第一个数作为枢轴，找到前面大于枢轴值的数和后面小于枢轴值的数交换，最后将枢轴值和小于枢轴值的最后一个数交换，完成快速排序。现在数组被分成了两部分，一边小于枢轴值，一边大于枢轴值，等于枢轴值得中间数组下标为t。若k>t，则说明前k个数在后面的子数组里也有，则要对后面排序；若不大于，则不用管后面的子数组。时间复杂度O(n)。  
+在这道题中我们利用快速排序的思想，每次都将范围内第一个数作为枢轴，找到前面大于枢轴值的数和后面小于枢轴值的数交换，最后将枢轴值和小于枢轴值的最后一个数交换，完成快速排序。现在数组被分成了两部分，一边小于枢轴值，一边大于枢轴值，等于枢轴值得中间数组下标为t。若k>t，则说明前k个数在后面的子数组里也有，则要对后面排序；若不大于，则不用管后面的子数组。该算法叫做Quick Select，时间复杂度O(n)。  
 ```cpp
 #include<iostream>
 #include<stdio.h>
@@ -233,7 +233,45 @@ int main()
 ```
 
 Solution 2:
-//TODO（堆排序）
+求解Min K也可以使用堆排序，使用容量为K大根堆，初始时，使用数组的前K个元素建堆，然后对N-K个元素进行如下操作：  
+
+    if A[i] >= heap.top 
+    	continue  
+    else 
+    	pop the heap.top
+    	insert A[i] to heap  
+
+这里的操作说明大根堆里时刻维护的是下标为0到i-1中最小的K个数，如果后续某个数小于这K个数中最大的数，则应该取代该数并成为最小的K个数中的一员。该算法的时间复杂度为O(K+(N-K)logK)，空间复杂度为O(K)。
+```cpp
+#include <iostream>
+#include <priority_queue>
+
+using namespace std;
+
+int main(){
+    int N, K;
+    cin >> N >> K;// we suppose N > K here and do nothing for unexpected input
+    int A[N];
+    for(int i = 0; i <= N-1; i++){
+        cin >> A[i];
+    }
+    priority_queue<int> heap;// we omit two other paras because we just use max heap
+    for(int i = 0; i <= K-1; i++){
+        heap.push(A[i]);
+    }
+    for(int i = K; i <= N-1; i++){
+    	if(A[i] < heap.top()){
+    	    heap.pop();
+    	    heap.push(A[i]);
+    	}
+    }
+    while(!heap.empty()){
+    	cout << heap.top();
+    	heap.pop();
+    }
+    return;
+}
+```
 
 <a name="Anchor4" id="Anchor4"></a>
 -**Find Number occurs half times**([Back to Index](#AnchorIndex))   
@@ -270,8 +308,8 @@ int MoreThanHalf(int a[], int N)
          return candidate;
 }
 ```
-<a name="Anchor1" id="Anchor1"></a>
--**[Leetcode:Median of Two Sorted Arrays](http://oj.leetcode.com/problems/median-of-two-sorted-arrays/)**(#AnchorIndex))    
+<a name="Anchor5" id="Anchor5"></a>
+-**[Leetcode:Median of Two Sorted Arrays](http://oj.leetcode.com/problems/median-of-two-sorted-arrays/)**([Back to Index](#AnchorIndex))     
 每次A B数组的k/2位置的元素进行比较，舍弃值较小的数所在数组的前k/2个数，如此迭代，这样每次能去除掉一半的元素，时间复杂度为O(log(m+n))。    
 ```java
 class Solution {
