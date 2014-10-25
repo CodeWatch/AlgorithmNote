@@ -39,11 +39,13 @@ Channel是为用户提供读写操作的对象，作用类似传统IO中的Strea
 -------
 <a name="Anchor4" id="Anchor4"></a>
 -**4.如何分配Buffer，生成文件的管道，通过管道做文件IO？**([Back to Index](#AnchorIndex))    
+```java
 ByteBuffer buffer = ByteBuffer.allocate(1024);//生成Buffer  
 FileInputStream fin = new FileInputStream("input.txt");//生成输入流对象  
 FileChannel fcin = fin.getChannel();//从输入流获取管道对象  
 FileOutputStream fout = new FileOutputStream("output.txt");//生成输出流对象  
 FileChannel fcout = fout.getChannel();//从输出流获取管道对象  
+```
 
 典型的buffer读写代码片段如下所示：  
 ```java
@@ -123,6 +125,7 @@ lock.release();//释放锁
 -**8.网络和异步I/O**([Back to Index](#AnchorIndex))   
 异步I/O实现了数据的无阻塞读写操作，其核心类包括Selector,ServerSocketChannel,SocketChannel和SelectionKey以及ByteBuffer。  
 
+下图展示了NIO典型工作过程
 [piclink]
 
 如下github链接是一个典型的NIO实现  
