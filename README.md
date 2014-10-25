@@ -14,8 +14,10 @@ Chapters
 3. [Greedy Strategy](Greedy Strategy.md)  
 4. [Tree & Linkedlist](Tree & Linkedlist.md)  
 5. [BFS & DFS](BFS & DFS.md)
-6. [STL related](STL related.md)  
-7. [Others](Others.md)  
+6. [Stack](Stack.md)
+7. [Geometry](Geometry.md)
+8. [STL related](STL related.md)  
+9. [Others](Others.md)  
 
 ####Engineering
 1. Website construction  
