@@ -126,7 +126,8 @@ lock.release();//释放锁
 异步I/O实现了数据的无阻塞读写操作，其核心类包括Selector,ServerSocketChannel,SocketChannel和SelectionKey以及ByteBuffer。  
 
 下图展示了NIO典型工作过程
-[piclink]
+
+![NIO working process](Image/NIO working process.png "NIO working process")  
 
 如下github链接是一个典型的NIO实现  
   `https://github.com/yangwm/JavaLearn/blob/master/src/jnio/MultiPortEcho.java`  
