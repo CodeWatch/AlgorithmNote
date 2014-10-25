@@ -7,6 +7,7 @@ Index:
 -[Find Number occurs half times](#Anchor4)  
 -[Leetcode:Median of Two Sorted Arrays](#Anchor5)
 
+-------
 <a name="Anchor1" id="Anchor1"></a>
 -**[Leetcode:single number II](http://oj.leetcode.com/problems/single-number-ii/)**([Back to Index](#AnchorIndex))    
   
@@ -110,6 +111,7 @@ vector<int> twoSingleNumber(int A[], int n){
 ```
 singleNumberSpecial()先找到两个数字不同的bit位，然后利用该bit位将数组分成两组，再应用之前的方法求解。
 
+-------
 <a name="Anchor2" id="Anchor2"></a>
 -**Find Reverse Pair**([Back to Index](#AnchorIndex))    
 问题描述：在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对的总数。      
@@ -174,6 +176,7 @@ public class Main {
 }
 ```
 
+-------
 <a name="Anchor3" id="Anchor3"></a>
 -**Find Min K**([Back to Index](#AnchorIndex))  
 问题描述：最小的K个数:输入n个整数，找出其中最小的K个数,并按从小到大顺序打印。   
@@ -273,6 +276,7 @@ int main(){
 }
 ```
 
+-------
 <a name="Anchor4" id="Anchor4"></a>
 -**Find Number occurs half times**([Back to Index](#AnchorIndex))   
 问题描述：找出出现次数刚好是一半的数字。有N个数，其中有一个数刚好出现一半次数，要求在线性时间内求出这个数。  
@@ -308,6 +312,8 @@ int MoreThanHalf(int a[], int N)
          return candidate;
 }
 ```
+
+-------
 <a name="Anchor5" id="Anchor5"></a>
 -**[Leetcode:Median of Two Sorted Arrays](http://oj.leetcode.com/problems/median-of-two-sorted-arrays/)**([Back to Index](#AnchorIndex))     
 每次A B数组的k/2位置的元素进行比较，舍弃值较小的数所在数组的前k/2个数，如此迭代，这样每次能去除掉一半的元素，时间复杂度为O(log(m+n))。    
