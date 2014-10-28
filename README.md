@@ -16,7 +16,7 @@ Chapters
 5. [BFS & DFS](BFS & DFS.md)
 6. [Stack](Stack.md)
 7. [Geometry](Geometry.md)
-8. [STL related](STL related.md)  
+8. [STL Related](STL Related.md)  
 9. [Probability](Probability.md)
 10. [Others](Others.md)  
 
