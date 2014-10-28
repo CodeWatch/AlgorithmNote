@@ -2,10 +2,7 @@
 <a name="AnchorIndex" id="AnchorIndex"></a>
 Index:  
 -[Find the number(not exceeding M) only formed by 0 and 1](#Anchor1)  
--[](#Anchor2)  
--[](#Anchor3)  
--[](#Anchor4)  
--[](#Anchor5)
+-[Leetcode:Gray Code](#Anchor2)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -71,3 +68,40 @@ public class MyOwn {
 	}
 }
 ``` 
+
+<a name="Anchor2" id="Anchor2"></a>
+-**[Leetcode:Gray Code](http://oj.leetcode.com/problems/gray-code/)**([Back to Index](#AnchorIndex))   
+一个普通解法:
+```cpp
+class Solution {
+public:
+    vector<int> grayCode(int n) {
+        vector<int> result;
+        result.push_back(0);
+        if(n <= 0) return result;
+        int multiplier = 1;
+        for(int i = 0;i<n;i++){
+            for(int j = (1<<i)-1;j>=0;j--){
+                result.push_back(result.at(j)+multiplier);
+            }
+            multiplier <<= 1;
+        }
+        return result;
+    }
+};
+```
+技巧性较强的解法，二进制转格雷码：gray = (binary) xor (binary >> 1)  
+```cpp
+class Solution {
+public:
+
+    vector<int> grayCode(int n) {
+        vector<int> vec;
+        int size = 1 << n;
+        for (int i = 0; i < size; i++) {
+            vec.push_back(i^(i >> 1));
+        }
+        return vec;
+    }
+};
+```

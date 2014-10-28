@@ -5,7 +5,9 @@ Index:
 -[Find Reverse Pair](#Anchor2)  
 -[Find Min K](#Anchor3)  
 -[Find Number occurs half times](#Anchor4)  
--[Leetcode:Median of Two Sorted Arrays](#Anchor5)
+-[Leetcode:Median of Two Sorted Arrays](#Anchor5)  
+-[Leetcode:Longest Substring Without Repeating Characters](#Anchor6)  
+-[Leetcode:Substring with Concatenation of All Words](#Anchor7)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -346,3 +348,92 @@ private:
             return A[pa - 1];
     }
 };
+```
+
+-------
+<a name="Anchor6" id="Anchor6"></a>
+-**[Leetcode:Longest Substring Without Repeating Characters](http://oj.leetcode.com/problems/longest-substring-without-repeating-characters/)**([Back to Index](#AnchorIndex))  
+
+使用快慢指针维护一个区间，使用set时刻保持区间内没有相同字符，核心思想：
+
+    * 如果有重复字符，移动slow指针
+    * 如果无重复字符，移动fast指针
+
+注意最后一次更新最长区间值。
+
+```cpp
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int ret = 0;
+        int n = s.size();
+        if(n == 0) return ret;
+        int fast = 0, slow = 0;
+        unordered_set<char> charDict;
+        while(fast <= n-1){
+            if(charDict.find(s[fast]) != charDict.end()){
+                int len = fast - slow;
+                if(len > ret) ret = len;
+                charDict.erase(charDict.find(s[slow]));
+                slow++;
+            }else{
+                charDict.insert(s[fast]);
+                fast++;
+            }
+        }
+        if(fast-slow > ret) ret = fast-slow;
+        return ret;        
+    }
+};
+```
+
+-------
+<a name="Anchor7" id="Anchor7"></a>
+-**[Leetcode:Substring with Concatenation of All Words](http://oj.leetcode.com/problems/substring-with-concatenation-of-all-words/)**([Back to Index](#AnchorIndex))  
+
+一个比较直观的解法（不一定最优）。维护一个< 单词，个数 >map，假设L中单词长度为wordLen，每次从S中截取L.size()*wordLen的子串，判断该子串是否能完全消耗map中的单词，如果可以，则该起始位置为有效解；如果不能，则将起始位置向后推进wordLen个位置。  
+
+```cpp
+class Solution {
+public:
+    vector<int> findSubstring(string S, vector<string> &L) {
+        vector<int> ret;
+        int n = S.size();
+        int m = L.size();
+        if(n == 0 || m == 0) return ret;
+        int wordLen = L[0].size();
+        map<string, int> dict;
+        for(int i = 0 ; i <= m-1; i++){
+            if(dict.find(L[i]) != dict.end()){
+                dict[L[i]]++;
+            }else{
+                dict[L[i]] = 1;
+            }
+        }
+        for(int i = 0; i <= n-m*wordLen; i++){
+            string sub = S.substr(i, m*wordLen);
+            map<string, int> dictCopy = dict;
+            bool isValid = true;
+            for(int j = 0; j <= m-1; j++){
+                string word = sub.substr(j*wordLen, wordLen);
+                map<string, int>::iterator itr = dictCopy.find(word);
+                if(itr != dictCopy.end()){
+                    if(itr->second == 0){
+                        isValid = false;
+                        break;
+                    }else{
+                        dictCopy[word]--;
+                    }
+                }else{
+                    isValid = false;
+                    break;
+                }
+            }
+            if(isValid){
+                ret.push_back(i);
+            }
+        }
+        return ret;
+    }
+};
+```

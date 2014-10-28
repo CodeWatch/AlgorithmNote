@@ -2,10 +2,7 @@
 <a name="AnchorIndex" id="AnchorIndex"></a>
 Index:  
 -[Leetcode:Best Time to Buy and Sell Stock III](#Anchor1)  
--[](#Anchor2)  
--[](#Anchor3)  
--[](#Anchor4)  
--[](#Anchor5)
+-[Leetcode:Decode Ways](#Anchor2)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -58,4 +55,41 @@ public class Solution {
 
 -------
 <a name="Anchor2" id="Anchor2"></a>
--****([Back to Index](#AnchorIndex))  
+-**[Leetcode:Decode Ways](http://oj.leetcode.com/problems/decode-ways/)**([Back to Index](#AnchorIndex))   
+分析题意可以发现字符串s的子串s.substr(0,i)对s.substr(0,i-1)和s.substr(0,i-2)存在依赖关系，即可以将原问题分解为小的子问题求解，通过记录子问题求解的结果来快速计算当前问题的结果。当字符串长度为1时，需要dp[0] = 1作为虚拟的初始子问题解。  
+
+一般的,dp[i]表示s.substr(0,i)的解码方式数量，则dp数组的求解过程如下：
+
+```cpp
+class Solution {
+public:
+    int numDecodings(string s) {
+        int n = s.size();
+        if(n <= 0) return 0;
+        int dp[n+1];
+        memset(dp, 0, sizeof(dp));
+        dp[0] = 1;
+        for(int i = 1; i <= n; i++){
+            if(s[i-1] == '0'){
+                if(i == 1 || !(s[i-2] == '1' || s[i-2] == '2')){
+                    dp[i] = 0;
+                }else{
+                    dp[i] += dp[i-2];
+                }
+            }else if(s[i-1] >= '1' && s[i-1] <= '6'){
+                dp[i] = dp[i-1];
+                if(i != 1 && (s[i-2] == '1' || s[i-2] == '2')){
+                    dp[i] += dp[i-2];
+                }
+            }else{
+                dp[i] = dp[i-1];
+                if(i != 1 && s[i-2] == '1'){
+                    dp[i] += dp[i-2];
+                }
+            }
+        }
+        return dp[n];
+    }
+};
+```
+
