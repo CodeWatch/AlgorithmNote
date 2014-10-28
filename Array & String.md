@@ -292,7 +292,7 @@ int MoreThanHalf(int a[], int N)
     int i;
     for(i=0;i<N-1;i++)//扫描前N-1个元素
     {
-        if(a == a[N-1])//判断当前元素与最后一个是否相等
+        if(a[i] == a[N-1])//判断当前元素与最后一个是否相等
         sum1++;
         if(sum2 == 0)
         {
@@ -301,7 +301,7 @@ int MoreThanHalf(int a[], int N)
         }
         else
         {
-             if(a == candidate)
+             if(a[i] == candidate)
                  sum2++;
              else
                  sum2--;
