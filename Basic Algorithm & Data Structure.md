@@ -1,11 +1,8 @@
-##STL related
+##Basic Algorithm & Data Structure
 <a name="AnchorIndex" id="AnchorIndex"></a>
 Index:  
 -[Heap Sort](#Anchor1)  
 -[Union Find Sets](#Anchor2)  
--[](#Anchor3)  
--[](#Anchor4)  
--[](#Anchor5)
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
