@@ -4,6 +4,7 @@ Index:
 -[Heap Sort](#Anchor1)  
 -[Union Find Sets](#Anchor2)  
 -[Nonrecursive Tree Traversal](#Anchor3)  
+-[KMP](#Anchor4)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -144,4 +145,62 @@ void postOrderTraversalNonRecursive(TreeNode * root){
 		if(stk.empty()) return;
 	}
 }
+```
+
+-------
+<a name="Anchor4" id="Anchor4"></a>
+-**KMP**([Back to Index](#AnchorIndex))  
+KMP算法，首先要算出字符串的覆盖数组，当发生在j长度失配时，只要把pattern向右移动j-overlay(j)长度就可以了。
+  
+```cpp
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std;
+
+int kmp_find(const string& target, const string& pattern) {
+    const int target_length = target.size();
+    const int pattern_length = pattern.size();
+    int * overlay_value = new int[pattern_length];
+    overlay_value[0] = -1;
+    int index = 0;
+    for (int i = 1; i < pattern_length; ++i) {
+        index = overlay_value[i - 1];
+        while (index >= 0 && pattern[index + 1] != pattern[i]) {
+            index = overlay_value[index];
+        }
+        if (pattern[index + 1] == pattern[i]) {
+            overlay_value[i] = index + 1;
+        } else {
+            overlay_value[i] = -1;
+        }
+    }
+    //match algorithm start
+    int pattern_index = 0;
+    int target_index = 0;
+    while (pattern_index < pattern_length && target_index < target_length) {
+        if (target[target_index] == pattern[pattern_index]) {
+            ++target_index;
+            ++pattern_index;
+        } else if (pattern_index == 0) {
+            ++target_index;
+        } else {
+            pattern_index = overlay_value[pattern_index - 1] + 1;
+        }
+    }
+    if (pattern_index == pattern_length) {
+        return target_index - pattern_index;
+    } else {
+        return -1;
+    }
+    delete [] overlay_value;
+}
+
+int main() {
+    string source = " annbcdanacadsannannabnna";
+    string pattern = " annacanna";
+    cout << kmp_find(source, pattern) << endl;
+    return 0;
+}
+
 ```
