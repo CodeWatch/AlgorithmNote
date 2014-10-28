@@ -3,7 +3,7 @@
 Index:  
 -[Select m elems from n equiprobably](#Anchor1)  
 -[Select k elems from a stream equiprobably](#Anchor2)  
--[shuffle](#Anchor3)  
+-[Shuffle](#Anchor3)  
 -[Rand5 to Rand3](#Anchor4)  
 -[Rand5 to Rand7](#Anchor5)  
 -[Rand2 to RandN](#Anchor6)  
@@ -58,7 +58,7 @@ k+1号结点被选取的概率，遍历到k+1号结点时被选中，且之后�
 
 -------
 <a name="Anchor3" id="Anchor3"></a>
--**[shuffle]**([Back to Index](#AnchorIndex))    
+-**[Shuffle]**([Back to Index](#AnchorIndex))    
 目标是等概率随机排列数组（洗牌算法）。假设有一个数组，包含n个元素。现在要重新排列这些元素，要求每个元素被放到任何一个位置的概率都相等（即1/n），并且直接在数组上重排（in place），不要生成新的数组。用O(n) 时间、O(1)辅助空间。  
 
 先想想如果可以开辟另外一块长度为n的辅助空间时该怎么处理，显然只要对n个元素做n次（不放回的）随机抽取就可以了。先从n个元素中任选一个，放入新空间的第一个位置，然后再从剩下的n-1个元素中任选一个，放入第二个位置，依此类推。  
