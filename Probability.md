@@ -1,4 +1,4 @@
-##Array & String
+##Probability
 <a name="AnchorIndex" id="AnchorIndex"></a>
 Index:  
 -[Select m elems from n equiprobably](#Anchor1)  

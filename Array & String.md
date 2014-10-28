@@ -72,7 +72,7 @@ int singleNumber(int A[], int n){
 	return ret;
 }
 
-int singleNumberSpecial(int A[], int n){
+int singleNumberSpecial(int A[], int n, int k){
 	int ret = 0;
 	int count[32];
 	memset(count,0,sizeof(count));
@@ -83,15 +83,15 @@ int singleNumberSpecial(int A[], int n){
 				count[i]++;
 			}
 		}
-		if(count[i]%ARY == 1){
+		if(count[i]%ARY == k){
 			ret |= b;
 		}
 	}
 	return ret;
 }
 
-vector<int> twoSingleNumber(int A[], int n){
-	int twoNum = singleNumberSpecial(A, n);
+vector<int> twoSingleNumber(int A[], int n, int k){
+	int twoNum = singleNumberSpecial(A, n, k);
 	int b = twoNum & (-twoNum);
 	int B[n],C[n];
 	int bi = 0,ci = 0;
@@ -181,8 +181,7 @@ public class Main {
 -------
 <a name="Anchor3" id="Anchor3"></a>
 -**Find Min K**([Back to Index](#AnchorIndex))  
-问题描述：最小的K个数:输入n个整数，找出其中最小的K个数,并按从小到大顺序打印。   
-
+问题描述：最小的K个数:输入n个整数，找出其中最小的K个数,并按从小到大顺序打印。     
 Solution 1:
 在这道题中我们利用快速排序的思想，每次都将范围内第一个数作为枢轴，找到前面大于枢轴值的数和后面小于枢轴值的数交换，最后将枢轴值和小于枢轴值的最后一个数交换，完成快速排序。现在数组被分成了两部分，一边小于枢轴值，一边大于枢轴值，等于枢轴值得中间数组下标为t。若k>t，则说明前k个数在后面的子数组里也有，则要对后面排序；若不大于，则不用管后面的子数组。该算法叫做Quick Select，时间复杂度O(n)。  
 ```cpp
