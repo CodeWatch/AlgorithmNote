@@ -30,8 +30,13 @@ Chapters
 
 Core contributors
 ------------
-[@sc703bupt](https://github.com/sc703bupt)
+[@sc703bupt](https://github.com/sc703bupt)  
 [@popolou](https://github.com/popolou)
+
+Contributors
+------------
+[@jasonZhouChao](https://github.com/jasonZhouChao)  
+
 Contact us
 ------------
 欢迎提出意见和建议到sc1_1@163.com.  

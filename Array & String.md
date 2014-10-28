@@ -6,8 +6,9 @@ Index:
 -[Find Min K](#Anchor3)  
 -[Find Number occurs half times](#Anchor4)  
 -[Leetcode:Median of Two Sorted Arrays](#Anchor5)  
--[Leetcode:Longest Substring Without Repeating Characters](#Anchor6)  
--[Leetcode:Substring with Concatenation of All Words](#Anchor7)  
+-[Leetcode:Longest Substring Without Repeating Characters](#Anchor6)   
+-[Leetcode:Substring with Concatenation of All Words](#Anchor7)   
+-[LeetCode:Next Permutation](#Anchor8)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -368,7 +369,7 @@ public:
         int n = s.size();
         if(n == 0) return ret;
         int fast = 0, slow = 0;
-        unordered_set<char> charDict;
+        unordered_set< char > charDict;
         while(fast <= n-1){
             if(charDict.find(s[fast]) != charDict.end()){
                 int len = fast - slow;
@@ -387,7 +388,9 @@ public:
 ```
 
 -------
+
 <a name="Anchor7" id="Anchor7"></a>
+
 -**[Leetcode:Substring with Concatenation of All Words](http://oj.leetcode.com/problems/substring-with-concatenation-of-all-words/)**([Back to Index](#AnchorIndex))  
 
 一个比较直观的解法（不一定最优）。维护一个< 单词，个数 >map，假设L中单词长度为wordLen，每次从S中截取L.size()*wordLen的子串，判断该子串是否能完全消耗map中的单词，如果可以，则该起始位置为有效解；如果不能，则将起始位置向后推进wordLen个位置。  
@@ -435,4 +438,70 @@ public:
         return ret;
     }
 };
+```
+
+-------
+<a name="Anchor8" id="Anchor8"></a>
+-**[LeetCode:Next Permutation](http://oj.leetcode.com/problems/next-permutation/)**([Back to Index](#AnchorIndex))  
+
+高效的方法求下一个Permutation。定义单调递增为最小的序列（如1,2,3,4,5），单调递减为最大的序列（如5,4,3,2,1），序列1,2,3,4,5的下一个Permutation为1,2,3,5,4，序列5,4,3,2,1的下一个Permutation为1,2,3,4,5。
+
+可以这样理解该方法，想象当前数列形成一个开口向下的折线，折线的左半部分单调递增，折线的右半部分单调递减。对于右半单调递减部分（包含顶点），已经没有办法调换其中的数字使得整体数列变大，因为其本身已经是右半部分子序列的最大情形，因此通过交换左半递增部分和右半递减部分来实现，交换的两数为**折线顶点左侧的第一个数x**和**右半递减部分第一个大于x的数y**，这样保证了产生了比原来更大的序列（因为y > x）。为了完成目标，还需要对原右半递减部分进行升序排序，保证产生了恰比原来大的序列（选用了第一个大于x的y且右半部分经过排序成为右半部分的最小序列）。
+
+这里可以用倒置右半部分代替排序，原因是y是第一个大于x的数，交换这两个数不会打破右半部分的单调递减特性。  
+
+注意，该方法适用于具有重复元素的数组生成下一个排列。
+```cpp
+class Solution {
+public:
+    void nextPermutation(vector<int> &num) {
+        for(int i = num.size()-1; i>=1; i--){//改变右起的第一个升序对可以使序列变大
+            if(num[i]>num[i-1]){//num[i-1]和num[i]是右起第一个升序对，此时下标从i到size()-1的元素是降序
+                for(int j = num.size()-1; j>=i; j--){
+                    if(num[j]>num[i-1]){
+                        swap(num[j], num[i-1]);
+                        reverse(num.begin()+i,num.end());
+                        return;
+                    }
+                }
+            }
+        }
+        reverse(num.begin(),num.end());//说明是降序，直接反转为升序为最小的排列
+    }
+};
+``` 
+
+-------
+<a name="Anchor9" id="Anchor9"></a>
+-**[LeetCode:Permutation Sequence](http://oj.leetcode.com/problems/permutation-sequence/)**([Back to Index](#AnchorIndex))  
+
+此题要求寻找给定位数的Permutation的第k个序列，以单调递增序列（如1,2,3,4,5）作为第1个序列。可以应用[Next Permutation](#Anchor8)方法，但效率太低。  
+
+此处使用另外一种方法求解。*TODO*:算法说明。  
+
+注意，给定的k可能超过n！。
+
+```cpp
+string getPermutation(int n, int k) {
+    int o[n+1];
+    o[0]=1;
+    for(int i=1;i<=n;i++)
+        o[i]=o[i-1]*i;
+    vector<int> v;
+    string s = "";
+    if(k>o[n])
+        return s;
+    for(int i=1;i<=n;i++)
+        v.push_back(i);
+    while(n>0){
+        int cnt = (k-1)/o[n-1];
+        s+=v[cnt]+'0';
+        v.erase(v.begin()+cnt);
+        k=k%o[n-1];
+        if(k==0)
+            k=o[n-1];
+        n--;
+    }    
+    return s;
+}
 ```
