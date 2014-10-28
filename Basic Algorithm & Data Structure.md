@@ -3,6 +3,7 @@
 Index:  
 -[Heap Sort](#Anchor1)  
 -[Union Find Sets](#Anchor2)  
+-[Nonrecursive Tree Traversal](#Anchor3)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -70,3 +71,77 @@ void swap(int * a, int * b){
 -------
 <a name="Anchor2" id="Anchor2"></a>
 -**Union Find Sets**([Back to Index](#AnchorIndex))   
+
+-------
+<a name="Anchor3" id="Anchor3"></a>
+-**Nonrecursive Tree Traversal**([Back to Index](#AnchorIndex))   
+
+掌握三种树的遍历的非递归版本是非常必要的，代码如下。  
+
+先序遍历：
+```cpp
+void preOrderTraversalNonRecursive(TreeNode * root){
+	stack<TreeNode*> stk;
+	for(;;){
+		while(root != NULL){
+			cout << root->val << " ";//visit
+			stk.push(root);
+			root = root->left;
+		}
+		if(!stk.empty()){
+			root = stk.top();
+			root = root->right;
+			stk.pop();
+		}else{
+			return;
+		}
+	}
+}
+```
+
+中序遍历：
+```cpp
+void inOrderTraversalNonRecursive(TreeNode * root){
+	stack<TreeNode*> stk;
+	for(;;){
+		while(root != NULL){
+			stk.push(root);
+			root = root->left;
+		}
+		if(!stk.empty()){
+			root = stk.top();
+			stk.pop();
+			cout << root->val << " ";//visit
+			root = root->right;
+		}else{
+			return;
+		}
+	}
+}
+```
+
+后序遍历：
+```cpp
+void postOrderTraversalNonRecursive(TreeNode * root){
+	stack<TreeNode*> stk;
+	TreeNode * lastVisit = NULL;
+	for(;;){
+		while(root != NULL){
+			stk.push(root);
+			root = root->left;
+		}
+		while(!stk.empty()){
+			root = stk.top();
+			if(root->right == lastVisit || root->right == NULL){
+				cout << root->val << " ";//visit
+				lastVisit = root;
+				stk.pop();
+			}else{
+				root = root->right;//root can't be NULL here
+				break;
+			}
+		}
+		if(stk.empty()) return;
+	}
+}
+```
