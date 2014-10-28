@@ -17,7 +17,8 @@ Chapters
 6. [Stack](Stack.md)
 7. [Geometry](Geometry.md)
 8. [STL related](STL related.md)  
-9. [Others](Others.md)  
+9. [Probability](Probability.md)
+10. [Others](Others.md)  
 
 ####Engineering
 1. Website construction  
