@@ -1,4 +1,4 @@
-AlgorithmNote(Our github blog is about to refactor recently)
+AlgorithmNote
 =============
 Introduction
 ------------
