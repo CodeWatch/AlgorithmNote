@@ -4,7 +4,8 @@ Index:
 -[Leetcode:Best Time to Buy and Sell Stock III](#Anchor1)  
 -[Leetcode:Decode Ways](#Anchor2)  
 -[LeetCode:Interleaving String](#Anchor3)  
--[LeetCode:Wildcard Matching](#Anchor3)  
+-[LeetCode:Wildcard Matching](#Anchor4)  
+-[LeetCode:Trapping Rain Water](#Anchor5)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -196,3 +197,44 @@ public:
     }
 };   
 ```  
+
+-------
+<a name="Anchor5" id="Anchor5"></a>
+-**[LeetCode:Trapping Rain Water](http://oj.leetcode.com/problems/trapping-rain-water/)**([Back to Index](#AnchorIndex))  
+
+转换思路，将整个容器能够容纳的水划分为每个柱子上方的容水量C[i]  
+    
+    * C[i] = Min{LeftHighest[i],RightHighest[i]} - A[i] 
+
+其中，LeftHighest[i]是柱子i左侧的最高柱高度（不包括自身），RightHighest[i]是柱子i右侧的最高柱高度（不包括自身），A[i]是柱子i的高度。LeftHighest和RightHighest可以用dp求解，最后对C[i]求和即可得到结果。
+
+```cpp
+class Solution {
+public:
+    int trap(int A[], int n) {
+        if(n<=2) return 0;
+        int units = 0;
+        vector<int> leftHighest;
+        leftHighest.resize(n);
+        leftHighest[0] = 0;
+        for(int i = 1; i<=n-1; i++){
+            if(A[i-1] < leftHighest[i-1]){
+                leftHighest[i] = leftHighest[i-1];
+            }else{
+                leftHighest[i] = A[i-1];
+            }
+        }
+        
+        int rightHighest = 0, tempUnit = 0;
+        for(int j = n-2; j>=1; j--){
+            if(A[j+1]>rightHighest){
+                rightHighest = A[j+1];
+            }
+            tempUnit = min(leftHighest[j],rightHighest)-A[j];
+            if(tempUnit <= 0) continue;
+            units += tempUnit;
+        }
+        return units;
+    }
+};
+```

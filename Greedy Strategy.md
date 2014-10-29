@@ -2,6 +2,7 @@
 <a name="AnchorIndex" id="AnchorIndex"></a>
 Index:  
 -[Cutting digits to make min number](#Anchor1)  
+-[LeetCode:Container With Most Water](#Anchor2)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -55,4 +56,34 @@ int main()
     }
 
 }
+```
+
+-------
+<a name="Anchor2" id="Anchor2"></a>
+-**[LeetCode:Container With Most Water](http://oj.leetcode.com/problems/container-with-most-water/) **([Back to Index](#AnchorIndex))  
+
+题意可理解为：给定一个数组，从中选出两个数字，从而使得以两个数字下标之差为宽、以两个数字较小者为高的矩形面积最大。使用两指针贪心法，总是移动数字较小的指针，贪心策略如下：  
+*  矩形面积受制于两下标之差，但这个差在两指针靠拢过程中总是缩小的，只能考虑高
+*  高是由较小者决定的，如果移动数字较大的，只能使面积变小（因为宽也变小了），而移动较小的则有可能变大
+
+```cpp
+class Solution {
+public:
+    int maxArea(vector<int> &height) {
+        if(height.size() == 0 || height.size() == 1) return 0;
+        int max = 0, S;
+        int low = 0, high = height.size()-1;
+        while(low<high){
+            if(height[low]<=height[high]){
+                S = (high-low)*height[low];
+                low++;
+            }else{
+                S = (high-low)*height[high];
+                high--;
+            }
+            if(S>max) max = S; 
+        }
+        return max;
+    }
+};
 ```
