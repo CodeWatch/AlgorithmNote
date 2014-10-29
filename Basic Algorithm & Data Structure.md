@@ -5,6 +5,7 @@ Index:
 -[Union Find Sets](#Anchor2)  
 -[Nonrecursive Tree Traversal](#Anchor3)  
 -[KMP](#Anchor4)  
+-[QuickSort in Linklist](#Anchor5)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -203,4 +204,72 @@ int main() {
     return 0;
 }
 
+```
+
+-------
+<a name="Anchor5" id="Anchor5"></a>
+-**QuickSort in Linklist**([Back to Index](#AnchorIndex))  
+
+主要思路是在做partition的时候将链表分为三个部分，做递归之前注意将每一段的尾部置空，合并时注意判断边界条件。在做链表拆分的时候使用了虚拟节点(dummy node)作为链表头，可以大大简化程序逻辑，推荐使用。 
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+class ListNode{
+public:
+	int val;
+	ListNode * next;
+	ListNode(int _val):val(_val),next(NULL){}
+};
+
+ListNode * quickSort(ListNode * head){
+	if(head == NULL || head->next == NULL){
+		return head;
+	}
+	ListNode dummyFront(-1), dummyMid(-1), dummyBack(-1);
+	ListNode * frontTail = NULL, * midTail = NULL, * backTail = NULL;
+	int num = head->val;
+	for(ListNode * itr = head; itr != NULL; itr = itr->next){
+		if(itr->val == num){
+			if(midTail == NULL){
+				dummyMid.next = itr;
+				midTail = itr;
+			}else{
+				midTail->next = itr;
+				midTail = midTail->next;
+			}
+		}else if(itr->val < num){
+			if(frontTail == NULL){
+				dummyFront.next = itr;
+				frontTail = itr;
+			}else{
+				frontTail->next = itr;
+				frontTail = frontTail->next;
+			}
+		}else{
+			if(backTail == NULL){
+				dummyBack.next = itr;
+				backTail = itr;
+			}else{
+				backTail->next = itr;
+				backTail = backTail->next;
+			}
+		}
+	}
+	if(frontTail != NULL) frontTail->next = NULL;
+	if(midTail != NULL) midTail->next = NULL;
+	if(backTail != NULL) backTail->next = NULL;
+	ListNode * frontRet = quickSort(dummyFront.next);
+	ListNode * backRet = quickSort(dummyBack.next);
+	ListNode * ret = frontRet == NULL ?dummyMid.next:frontRet;
+	if(frontRet != NULL){
+		ListNode * itr = NULL;
+		for(itr = frontRet; itr->next != NULL; itr = itr->next){}
+		itr->next = dummyMid.next;
+	}
+	midTail->next = backRet;
+	return ret;
+}
 ```

@@ -9,6 +9,10 @@ Index:
 -[Leetcode:Longest Substring Without Repeating Characters](#Anchor6)   
 -[Leetcode:Substring with Concatenation of All Words](#Anchor7)   
 -[LeetCode:Next Permutation](#Anchor8)  
+-[LeetCode:Permutation Sequence](#Anchor9)  
+-[Leetcode:Multiply Strings](#Anchor10)  
+-[Leetcode:Implement strStr()](#Anchor11)  
+-[Leetcode:String to Integer (atoi)](#Anchor12)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -504,4 +508,134 @@ string getPermutation(int n, int k) {
     }    
     return s;
 }
+```
+
+-------
+<a name="Anchor10" id="Anchor10"></a>
+-**[Leetcode:Multiply Strings](http://oj.leetcode.com/problems/multiply-strings/)**([Back to Index](#AnchorIndex))  
+
+限定此题的输入为两个正整数字符串，要求这两个正整数的乘积。思路比较清晰：
+    
+    a) 对num1逆序
+    b) 对num2逆序
+    c) res[i+j] += num1[i] * num2[j];
+    d) res[i+j+1] += res[i+j] / 10;
+    e) res[i+j] = res[i+j] % 10; 
+
+注意最后检查结果是否全为0，并去除结果的前导0。
+
+```cpp
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+        int len1 = num1.length();
+        int len2 = num2.length();
+        vector<int> res(len1+len2);
+        vector<int> n1;
+        vector<int> n2;
+        for(int i=num1.length()-1;i>=0;--i)
+            n1.push_back(num1[i]-'0');
+        for(int i=num2.length()-1;i>=0;--i)
+            n2.push_back(num2[i]-'0');
+        for(int i=0;i<n1.size();++i){
+            for(int j=0;j<n2.size();++j){
+                res[i+j] += n1[i]*n2[j];
+                res[i+j+1] += res[i+j]/10;
+                res[i+j] = res[i+j]%10;
+            }
+        }
+        string ret;
+        int i=res.size()-1;
+        while(res[i]==0 && i>=0)
+            --i;
+        if(i<0)
+            return "0";
+        while(i>=0){
+            ret.push_back('0'+res[i]-0);
+            --i;
+        }
+        return ret;
+    }
+};
+```
+
+-------
+<a name="Anchor11" id="Anchor11"></a>
+-**[Leetcode:Implement strStr()](oj.leetcode.com/problems/implement-strstr/)**([Back to Index](#AnchorIndex))  
+
+haystack为主串，needle为匹配串。思路比较简单：每次选取主串中的一个字符作为主串的起始匹配位置，选取子串的头作为另一个起始匹配位置，匹配跳出条件：
+    
+    * 对应位置字符不同
+    * 两个字符串的其中一个或两个均到达'\0'位置
+
+可以这些跳出情况，只需要判断跳出时needle是否已经到达'\0'位置即可，如果到达，则说明找到该子串，返回该子串在主串中的头字符位置即可。
+
+```cpp
+class Solution {
+public:
+    char *strStr(char *haystack, char *needle) {
+        int len1 = strlen(haystack);
+        int len2 = strlen(needle);
+        if (len1 < len2)
+            return NULL;
+        if (len2 == 0)
+            return haystack;
+        char* p2 = haystack;
+        for (int i = 0; i < len1 - len2 + 1; i++) {
+            char* p1 = needle;
+            char* p_old = (char*) p2;
+            while (*p1 && *p2) {
+                if (*p1 == *p2) {
+                    p1++;
+                    p2++;
+                } else
+                    break;
+            }
+            if (!*p1)
+                return p_old;
+            p2 = p_old + 1;
+        }
+        return NULL;
+    }
+};
+```
+
+-------
+<a name="Anchor12" id="Anchor12"></a>
+-**[Leetcode:String to Integer (atoi)](oj.leetcode.com/problems/string-to-integer-atoi/) **([Back to Index](#AnchorIndex))  
+
+注意判断先导空格，符号和溢出情况。  
+
+```cpp
+class Solution {
+public:
+
+    int atoi(const char *str) {
+        int i = 0;
+        int len = strlen(str);
+        bool positive = true;
+        while (str[i] == ' ' && i < len)
+            i++;
+        if (str[i] == '+')
+            i++;
+        else if (str[i] == '-') {
+            positive = false;
+            i++;
+        }
+        long long sum = 0;
+        for (; i < len; i++) {
+            if (str[i] < '0' || str[i] > '9')
+                break;
+            sum = sum * 10 + str[i] - '0';
+        }
+        sum = positive == true ? sum : -1 * sum;
+        int min = 0x80000000;
+        int max = 0x7fffffff;
+        if (sum < min)
+            return 0x80000000;
+        else if (sum > max)
+            return 0x7fffffff;
+        return (int) sum;
+    }
+};
 ```

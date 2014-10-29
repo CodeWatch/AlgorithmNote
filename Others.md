@@ -3,6 +3,9 @@
 Index:  
 -[Find the number(not exceeding M) only formed by 0 and 1](#Anchor1)  
 -[Leetcode:Gray Code](#Anchor2)  
+-[Leetcode:Pow(x, n)](#Anchor3)  
+-[Leetcode:Sqrt(x)](#Anchor4)  
+-[*TODO*::Leetcode:Valid Number](#Anchor5)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -69,6 +72,7 @@ public class MyOwn {
 }
 ``` 
 
+-------
 <a name="Anchor2" id="Anchor2"></a>
 -**[Leetcode:Gray Code](http://oj.leetcode.com/problems/gray-code/)**([Back to Index](#AnchorIndex))   
 一个普通解法:
@@ -105,3 +109,72 @@ public:
     }
 };
 ```
+
+-------
+<a name="Anchor3" id="Anchor3"></a>
+-**[Leetcode:Pow(x, n)](http://oj.leetcode.com/problems/powx-n/)**([Back to Index](#AnchorIndex))   
+
+求解x的n次方，可以考虑如下分类法
+    
+    * 如果n = 0，则返回1
+    * 如果n > 0，则先求解x的n/2次方结果，再根据奇偶性决定是否额外乘以x
+    * 如果n < 0，则对n取绝对值，即求解x的-(n/2)次方的结果，在根据奇偶性决定是否额外乘以x，注意此时返回值需要取倒数 
+
+```cpp
+class Solution {
+public:
+    double pow(double x, int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        if(n == 0) return 1;
+        else if(n > 0)
+        {
+            double half = pow(x, n/2);
+            if(n%2 == 0) return half*half;
+            else return half*half*x;
+        } 
+        else
+        {
+            n = -n;
+            double half = pow(x, n/2);
+            if(n%2 == 0) return 1.0/(half*half);
+            else return 1.0/(half*half*x);
+        }
+    }
+};
+```
+
+-------
+<a name="Anchor4" id="Anchor4"></a>
+-**[Leetcode:Sqrt(x)](http://oj.leetcode.com/problems/sqrtx/)**([Back to Index](#AnchorIndex)) 
+
+二分法。
+
+```cpp
+class Solution {
+public:
+
+    int sqrt(int x) {
+        int left = 1, right = x / 2;
+        int mid;
+        int last_mid; // 记录最近一次mid
+        if (x < 2) return x;
+        while (left <= right) {
+            mid = left + (right - left) / 2;
+            if (x / mid > mid) { // 不要用x > mid * mid，会溢出
+                left = mid + 1;
+                last_mid = mid;
+            } else if (x / mid < mid) {
+                right = mid - 1;
+            } else {
+                return mid;
+            }
+        }
+        return last_mid;
+    }
+};
+```
+
+-------
+<a name="Anchor5" id="Anchor5"></a>
+-**[Leetcode:Valid Number](oj.leetcode.com/problems/valid-number/)**([Back to Index](#AnchorIndex)) 

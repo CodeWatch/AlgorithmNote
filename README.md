@@ -27,6 +27,7 @@ Chapters
 1. [Basic Java Concepts](Basic Java Concepts.md) 
 2. [NIO](NIO.md)
 3. [Big Data Processing](Big Data Processing.md)
+4. [Functions In string.h](Functions in string.h.md)
 
 Core contributors
 ------------
@@ -39,6 +40,6 @@ Contributors
 
 Contact us
 ------------
-欢迎提出意见和建议到sc1_1@163.com.  
+欢迎提出意见和建议到 sc1_1@163.com.  
 
 Any advice is appreciated, please send email to sc1_1@163.com.
