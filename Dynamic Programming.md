@@ -6,6 +6,7 @@ Index:
 -[LeetCode:Interleaving String](#Anchor3)  
 -[LeetCode:Wildcard Matching](#Anchor4)  
 -[LeetCode:Trapping Rain Water](#Anchor5)  
+-[*TODO*::Leetcode:Palindrome Partitioning II](#Anchor6)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -66,6 +67,7 @@ public class Solution {
 ```cpp
 class Solution {
 public:
+
     int numDecodings(string s) {
         int n = s.size();
         if(n <= 0) return 0;
@@ -162,10 +164,12 @@ public class Solution {
 <a name="Anchor4" id="Anchor4"></a>
 -**[LeetCode:Wildcard Matching](http://oj.leetcode.com/problems/wildcard-matching/)  **([Back to Index](#AnchorIndex)) 
   
-这道题dp[i][j]表达的意思是s1长度为i的串是否和s2中长度为j的串匹配。但这道题有一个小技巧，就是用s2的字符去匹配s1的字符。当s2的第j个字符是\*时，这里有两种选择：既可以让\*去匹配s1的一个字符，使i前进1，也可以把*当成空白，此时dp[j][i]的状态就等于dp[j-1][i]的状态。当s2遇到?时，和s1的第i个字符与s2的第j个字符相等是等效的，此时dp[j][i]=dp[j-1][i-1]  
+这道题dp[i][j]表达的意思是s1长度为i的串是否和s2中长度为j的串匹配。但这道题有一个小技巧，就是用s2的字符去匹配s1的字符。当s2的第j个字符是\*时，这里有两种选择：既可以让\*去匹配s1的一个字符，使i前进1，也可以把*当成空白，此时dp[j][i]的状态就等于dp[j-1][i]的状态。当s2遇到?时，和s1的第i个字符与s2的第j个字符相等是等效的，此时dp[j][i]=dp[j-1][i-1] 
+
 ```cpp  
 class Solution {   
-public:   
+public:
+
   bool isMatchDp(string& t, string& p){
     int tLen = t.length();
     int pLen = p.length();
@@ -238,3 +242,8 @@ public:
     }
 };
 ```
+
+-------
+<a name="Anchor6" id="Anchor6"></a>
+-**[Leetcode:Palindrome Partitioning II](http://oj.leetcode.com/problems/palindrome-partitioning-ii/) **([Back to Index](#AnchorIndex))  
+ 

@@ -13,6 +13,13 @@ Index:
 -[Leetcode:Multiply Strings](#Anchor10)  
 -[Leetcode:Implement strStr()](#Anchor11)  
 -[Leetcode:String to Integer (atoi)](#Anchor12)  
+-[LeetCode:Maximum Subarray](#Anchor13)  
+-[Maximum SubMatrix](#Anchor14)  
+-[LeetCode:Two Sum](#Anchor15)  
+-[LeetCode:3Sum](#Anchor16)  
+-[LeetCode:4Sum](#Anchor17)  
+-[LeetCode:Combination Sum](#Anchor18)  
+-[LeetCode:Combination Sum II](#Anchor19)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -637,5 +644,365 @@ public:
             return 0x7fffffff;
         return (int) sum;
     }
+};
+```
+
+-------
+<a name="Anchor13" id="Anchor13"></a>
+-**[LeetCode:Maximum Subarray](http://oj.leetcode.com/problems/maximum-subarray/)**([Back to Index](#AnchorIndex))  
+
+经典问题，求解连续子数组最大和。核心思想是维护一个当前和值sum，如果sum比max大，则更新；如果sum小于0，则对后面的子数组没有贡献，肯定不属于可行解的一部分，舍去，最终求出结果。
+```cpp
+class Solution {
+public:
+    int maxSubArray(int A[], int n) {
+        int sum = 0, max = INT_MIN;
+        for(int i = 0; i <= n-1; i++){
+            sum += A[i];
+            if(sum > max){
+                max = sum;
+            }
+            if(sum < 0){
+                sum = 0;
+            }
+        }
+        return max;
+    }
+};
+```
+
+-------
+<a name="Anchor14" id="Anchor14"></a>
+-**Maximum SubMatrix**([Back to Index](#AnchorIndex))   
+
+求解一个二维数组A[N][M]拥有最大和值的子数组，如  
+1 -1 -1  
+-1 5 7  
+-1 6 8  
+结果子数组为  
+5 7  
+6 8  
+和值为26  
+
+考虑将二维数组降维为一维处理，可以获得O(N<sup>2</sup>M)的时间复杂度。具体做法是使用s，e作为上下界确定矩形的高，将s和e之间的**一列元素的和**等同于一维问题的一个元素。对于特定的s和e，应用一维的O(n)算法求出特定s和e情形下的最大值；穷举s和e的组合，求出全局的最大值。使用dp的方法事先求解列和，dp[i][j]表示第j列中第0个至第i个的和值。
+
+```cpp
+int Solution(vector<vector<int> > input){
+    if(input.empty()) return INT_MIN;
+    if(input[0].empty()) return INT_MIN;
+    
+    int ret = INT_MIN;
+    int row = input.size(), col = input[0].size();
+    
+    int dp[row][col];
+    for(int i = 0; i <= row-1; i++){
+        for(int j = 0; j <= col-1;j++){
+            if(i == 0){
+                dp[i][j] = input[i][j];
+            }else{
+                dp[i][j] = input[i][j] + dp[i-1][j];
+            }
+        }
+    }
+    
+    int A[col];
+    for(int s = 0; s <= row-1; s++){
+        for(int e = s; e <= row-1; e++){
+            for(int k = 0; k <= col-1; k++){
+                if(s == 0){
+                    A[k] = dp[e][k];
+                }else{
+                    A[k] = dp[e][k] - dp[s-1][k];
+                }
+            }
+            int temp = MaxSubArray(A, col);
+            ret = temp > ret?temp:ret;
+        }
+    }
+    return ret;
+}
+
+int MaxSubArray(int A[], int n){
+    int sum = 0, max = INT_MIN;
+    for(int i = 0; i <= n-1; i++){
+        sum += A[i];
+        if(sum > max){
+            max = sum;
+        }
+        if(sum < 0){
+            sum = 0;
+        }
+    }
+    return max;
+}
+```
+
+-------
+<a name="Anchor15" id="Anchor15"></a>
+-**[LeetCode:Two Sum](http://oj.leetcode.com/problems/two-sum/)**([Back to Index](#AnchorIndex))   
+
+基础题，寻找两个数和为给定值，可以采用两指针贪心法。这里展示map方法，即把数列以(value,positon)的形式存入map，然后使用target-numbers[i]查找。注意输出格式。
+```cpp
+class Solution {
+public:
+    vector<int> twoSum(vector<int> &numbers, int target) {
+        map<int,int> temp;
+        vector<int> result;
+        
+        for(int i = 0;i<=numbers.size()-1;i++){
+            temp.insert(pair<int,int>(numbers.at(i),i+1));
+        }
+        for(int i = 0;i<=numbers.size()-1;i++){
+            map<int,int>::iterator itr = temp.find(target-numbers.at(i));
+            if(itr!=temp.end()){
+                if(itr->second == i+1){
+                    continue;
+                }
+                if(itr->second<i+1){
+                    result.push_back(itr->second);
+                    result.push_back(i+1);
+                }else{
+                    result.push_back(i+1);
+                    result.push_back(itr->second);
+                }
+                return result;
+            }
+        }
+        return result;
+    }
+};
+```
+
+-------
+<a name="Anchor16" id="Anchor16"></a>
+-**[LeetCode:3Sum](http://oj.leetcode.com/problems/3sum/)**([Back to Index](#AnchorIndex))   
+
+寻找和为定值的3个数可以通过事先选定一个数降维为two sum问题，同理寻找和为定值的k个数都可以通过多次降维最终通过two sum解决，此题虽然求得是3sum，这里给出ksum的通用解法。其中k==2的递归出口使用的就是两指针贪心法。
+
+**注意**，为了使用两指针方法，必须对数列**预先排序**。
+```cpp
+class Solution {
+public:
+    vector<vector<int> > threeSum(vector<int> &num) {
+        vector<vector<int>> ret;
+        if(num.size()<3) return ret;
+        sort(num.begin(), num.end());
+        ret = findKSum(num, 0, 3, 0);
+        return ret;
+    }
+    
+    vector<vector<int> > findKSum(vector<int> &num, int start, int k, int target){//require sorted vector
+        vector<vector<int>> ret;
+        unordered_set<int> visited;
+        if(k == 2){
+            int i = start, j = num.size()-1;
+            while(i < j){
+                if(visited.find(num[i]) != visited.end()){
+                    i++;
+                    continue;
+                }
+
+                int sum = num[i] + num[j];
+                if(sum == target){
+                    vector<int> tempV;
+                    tempV.push_back(num[i]);
+                    tempV.push_back(num[j]);
+                    visited.insert(num[i]);
+                    visited.insert(num[j]);
+                    ret.push_back(tempV);
+                    i++;
+                    j--;
+                }else if(sum < target){
+                    i++;
+                }else{
+                    j--;
+                }
+            }
+        }else{
+            for(int i = start; i <= num.size()-1; i++){
+                if(visited.find(num[i]) != visited.end()){
+                    continue;
+                }else{
+                    visited.insert(num[i]);
+                    vector<vector<int>> tempRet = findKSum(num, i+1, k-1, target-num[i]);
+                    if(!tempRet.empty()){
+                        for(int j = 0; j <= tempRet.size()-1; j++){
+                            tempRet[j].insert(tempRet[j].begin(), num[i]);
+                            ret.push_back(tempRet[j]);
+                        }
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+};
+```
+
+-------
+<a name="Anchor17" id="Anchor17"></a>
+-**[LeetCode:4Sum](http://oj.leetcode.com/problems/4sum/)**([Back to Index](#AnchorIndex))  
+
+选定区间的两个端点，对区间应用Two Sum算法，时间复杂度O(n^3)。
+
+class Solution {
+public:
+    vector<vector<int> > fourSum(vector<int> &num, int target) {
+        set<vector<int> > tempRet;
+        int n = num.size();
+        sort(num.begin(), num.end());
+        for(int s = 0; s <= n-1; s++){
+            for(int e = s+3; e <= n-1; e++){
+                int a = s+1, b = e-1;
+                while(a < b){
+                    int sum = num[s] + num[e] + num[a] + num[b];
+                    if(sum == target){
+                        vector<int> temp;
+                        temp.push_back(num[s]);
+                        temp.push_back(num[a]);
+                        temp.push_back(num[b]);
+                        temp.push_back(num[e]);
+                        tempRet.insert(temp);
+                        a++;
+                        b--;
+                    }else if(sum < target){
+                        a++;
+                    }else{
+                        b--;
+                    }
+                }
+            }
+        }
+        vector<vector<int> > ret(tempRet.begin(), tempRet.end());
+        return ret;
+    }
+};
+```
+
+-------
+<a name="Anchor18" id="Anchor18"></a>
+-**[LeetCode:Combination Sum](http://oj.leetcode.com/problems/combination-sum/)**([Back to Index](#AnchorIndex))  
+
+此题要求给定目标和的组合数，对于每个数有不选，选1，选2个...选n个共n+1个选择，注意剪枝。使用Set去重，暂时没考虑在求解过程中自动去重（对candidates排序，看当前数字和前一个数字是否相同进行去重可能可行）。
+```cpp
+class Solution {
+public:
+    set<vector<int> > resultSet;
+    vector<vector<int> > combinationSum(vector<int> &candidates, int target) {
+        vector<vector<int> > result;
+        vector<int> temp;
+        if(candidates.size() == 0) return result;
+        sort(candidates.begin(),candidates.end());
+        compute(temp, candidates, 0, 0, target);
+        for(set<vector<int> >::iterator itr = resultSet.begin(); itr != resultSet.end(); itr++){
+            result.push_back(*itr);
+        }
+        return result;
+    }
+    
+    void compute(vector<int> temp, vector<int>& candidates, int index, int currentVal, int target){
+        if(index == candidates.size()) return;
+        
+        compute(temp, candidates, index+1, currentVal, target);
+        
+        for(int i = 1; currentVal + i * candidates[index] <= target; i++){
+            temp.push_back(candidates[index]);
+            if(currentVal + i * candidates[index] == target){
+                resultSet.insert(temp);
+            }else{
+                compute(temp, candidates, index+1, currentVal+i*candidates[index], target);
+            }
+        }
+        
+        return;
+    }
+};
+```
+
+-------
+<a name="Anchor19" id="Anchor19"></a>
+-**[LeetCode:Combination Sum II](http://oj.leetcode.com/problems/combination-sum-ii/)**([Back to Index](#AnchorIndex))  
+
+此题与Ex5区别在于每个数只能用一次，该问题更确切的说是一个01背包问题，使用Set去重，应用以下剪枝方法需要对待选数字升序排序。
+
+01的背包方法剪枝:下述方法的前提是物品价值W<sub>i</sub>是升序的（降序也可以使用，较为麻烦）。X是解向量，t=Σ<sub>(1...k-1)</sub>W<sub>i</sub>*X<sub>i</sub>，即为k-1个已选的物品的总价值，r=Σ<sub>(k...n)</sub>W<sub>i</sub>，即为剩余物品的总价值在t+k != M的前提下，X={X<sub>1</sub>,X<sub>2</sub>...X<sub>(k-1)</sub>,X<sub>k</sub>,0...0}已经可以判定不是有效解，只能看第k+1的物品的情况，考虑第k个物品的两种情况
+
+    **选择k**：若t+W<sub>k</sub>+W<sub>(k+1)</sub><=M，则说明选入作为剩余物品中价值最小的物品W<sub>(k+1)</sub>使得X的解可能存在（反过来说如果t+W<sub>k</sub>+W<sub>(k+1)</sub>>M则说明t+W<sub>k</sub>+Σ<sub>(k+1..n)</sub>W<sub>i</sub>*X<sub>i</sub>>M，则X无解），令Xk =1，递归左儿子；否则剪枝。  
+    
+    **不选择k**：若t+r-k>=M&&t+(k+1)<=M，一方面判断剩下的物品还足够填满M，同时同选择k情形判断第k+1个物品是否使得X的解可能存在。
+
+```cpp
+class Solution {
+public:
+    
+    set<vector<int> > resultSet;
+    vector<vector<int> > combinationSum2(vector<int> &num, int target) {
+        vector<vector<int> > result;
+        if(num.size() == 0) return result;
+        vector<int> temp;
+        temp.clear();
+        sort(num.begin(), num.end());
+        int rest = 0;
+        for(int i = 0; i<=num.size()-1; i++){
+            rest += num[i];
+        }
+        compute(temp, num, 0, rest, target);
+        for(set<vector<int> >::iterator itr = resultSet.begin(); itr != resultSet.end(); itr++){
+            result.push_back(*itr);
+        }
+        
+        return result;
+    }
+    
+    
+    //优化剪枝的递归函数 92ms
+    void compute(vector<int>& temp, vector<int> num, int currentVal, int restVal, int target){
+        if(num.size() == 0) return;
+        
+        if(currentVal + num[0] == target){
+            temp.push_back(num[0]);
+            resultSet.insert(temp);
+            temp.pop_back();
+            return;
+        }
+        
+        if(num.size() == 1) return;
+        
+        if(currentVal + num[0] + num[1] <= target){
+            temp.push_back(num[0]);
+            compute(temp, vector<int>(num.begin()+1, num.end()), currentVal+num[0], restVal-num[0], target);
+            temp.pop_back();
+        }
+        
+        if(currentVal + restVal - num[0] >= target && currentVal + num[1] <= target){
+            compute(temp, vector<int>(num.begin()+1, num.end()), currentVal, restVal-num[0], target);
+        }
+        
+        return;
+    }
+    
+    
+    //未优化剪枝的递归函数 1160ms
+    /*
+    void compute(vector<int>& temp, vector<int> num, int currentVal, int restVal, int target){
+        if(num.size() == 0) return;
+        
+        if(currentVal + num[0] == target){
+            temp.push_back(num[0]);
+            resultSet.insert(temp);
+            temp.pop_back();
+            return;
+        }
+        
+        if(currentVal + num[0] <= target){
+            temp.push_back(num[0]);
+            compute(temp, vector<int>(num.begin()+1, num.end()), currentVal+num[0], restVal-num[0], target);
+            temp.pop_back();
+        }
+        
+        compute(temp, vector<int>(num.begin()+1, num.end()), currentVal, restVal-num[0], target);
+        
+        return;
+    }*/
 };
 ```

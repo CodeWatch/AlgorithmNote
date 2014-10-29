@@ -9,6 +9,7 @@ Index:
 -[Leetcode:Flatten Binary Tree to Linked List](#Anchor6)  
 -[Leetcode:Construct Binary Tree from Inorder and Postorder Traversal](#Anchor7)  
 -[Leetcode:Recover Binary Search Tree](#Anchor8)  
+-[*TODO*::LeetCode:Binary Tree Maximum Path Sum](#Anchor9)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -240,4 +241,8 @@ public:
     }
 };
 ```
+
+-------
+<a name="Anchor9" id="Anchor9"></a>
+-**[LeetCode:Binary Tree Maximum Path Sum](http://oj.leetcode.com/problems/binary-tree-maximum-path-sum/)**([Back to Index](#AnchorIndex))   
 

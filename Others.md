@@ -6,6 +6,8 @@ Index:
 -[Leetcode:Pow(x, n)](#Anchor3)  
 -[Leetcode:Sqrt(x)](#Anchor4)  
 -[*TODO*::Leetcode:Valid Number](#Anchor5)  
+-[Four Color Theorem](#Anchor6)  
+-[Count number of digit 1 from 1 to n](#Anchor7)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -178,3 +180,79 @@ public:
 -------
 <a name="Anchor5" id="Anchor5"></a>
 -**[Leetcode:Valid Number](oj.leetcode.com/problems/valid-number/)**([Back to Index](#AnchorIndex)) 
+
+-------
+<a name="Anchor6" id="Anchor6"></a>
+-**[Four Color Theorem]**([Back to Index](#AnchorIndex)) 
+四色定理：用颜色去标记图的所有顶点，要求相邻的顶点颜色不同，问最少多少种颜色。  
+用数字代表颜色。遍历图，对于每个节点，记录与它相邻节点的颜色，然后选出这些颜色中不包含的、数字最小的颜色，涂在当前节点。  
+
+```java
+public class Solution {
+    public void FourColor(String[] ss) {
+        int len = ss.length;
+        boolean[][] map = new boolean[len + 1][27];
+        for (String s : ss)
+            for (int i = 2; i < s.length(); i++)
+                map[s.charAt(0) - 'A' + 1][s.charAt(i) - 'A' + 1] = true;
+        int max = 0;
+
+        int[] color = new int[27];
+        for (int i = 1; i <= len; i++) {
+            boolean[] visit = new boolean[len + 1];
+            for (int j = 1; j <= len; j++)
+                if (map[i][j])//看j是否是i的邻接节点
+                    if (color[j] != 0)//如果j被涂色了
+                        visit[color[j]] = true;//将该颜色做标记
+            for (int j = 1; j <= len; j++)
+                if (!visit[j]) {//从中选出序号最小的未被使用的颜色
+                    color[i] = j;//涂色
+                    max = Math.max(max, j);//目前用的颜色数量的最大值
+                    break;
+                }
+        }
+
+        System.out.println(max);
+    }
+
+    public static void main(String[] args) {
+        Solution m = new Solution();
+        // String[] ss = { "A:BCD", "B:ACD", "C:ABD", "D:ABC" };
+        String[] ss = { "A:BC", "B:ACD", "C:ABD", "D:BC" };
+        m.FourColor(ss);
+    }
+}
+```
+-------
+<a name="Anchor7" id="Anchor7"></a>
+-**[Count number of digit 1 from 1 to n]**([Back to Index](#AnchorIndex))  
+
+统计从1到n共n个十进制整数中包含1的总数，如输入n=11，统计结果为4（1,10,11）。  
+核心思路是按位统计1的个数，以一个例子来说明规则是如何被应用的。统计百位上1的个数：  
+* 对于十进制数12035,由于百位上的数是'0'，故只由百位前面的“高位”决定
+    + 12 * 100个(0100~0199,1100~1199,2100~2199...10100~10199,11100~11199)
+* 对于十进制数12135，由于百位上的数是'1'，故由百位前面的“高位”和百位后面的“低位”共同决定
+    + 12 * 100个(0100~0199,1100~1199,2100~2199...10100~10199,11100~11199)
+    + 35 + 1个(12100~12135)
+* 对于十进制数12512，由于百位上的数是'5'，故由百位前面的“高位”决定
+    + (12 + 1) * 100个(0100~0199,1100~1199,2100~2199...10100~10199,11100~11199,12100~12199)  
+由此可以看出统计规则主要是在统计第x位时，获得x的“高位”和低位，并根据x与1的关系分类计算，代码如下。
+
+```cpp
+int countOnes(int n){
+    int ret = 0, factor = 1;
+    int higher = 0, cur = 0, lower = 0;
+    while(n / factor != 0){//n == 12135
+        higher = n/(factor*10);//12, when factor == 100
+        cur = (n/factor)%10;//1, when factor == 100
+        lower = n%factor;//35, when factor == 100
+        switch(cur){
+            case 0: ret += higher * factor; break;
+            case 1: ret += higher * factor + lower + 1; break;
+            default: ret += (higher + 1) * factor; break;
+        }
+        factor *= 10;
+    }
+    return ret;
+}
+```
