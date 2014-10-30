@@ -1015,8 +1015,9 @@ public:
 -**[Leetcode:Regular Expression Matching](http://oj.leetcode.com/problems/regular-expression-matching/)**([Back to Index](#AnchorIndex))  
 
 每次首先判断p当前字符的下一个字符是不是*  
-* 不是*，如果s和p的当前字符相同，判断s和p的下一位
-* 是*，若p的当前字符是'.'，则可以匹配到s的末尾；否则，用p的当前字符一直去匹配s，若p当前字符等于s当前字符，判断若p重复0次s和p是否能匹配；若能则跳出循环，若不能，用p当前字符继续匹配s的下一位。当p的当前字符终于和s的当前字符不相等时，则返回p后面的字符串和s是否匹配。
+    
+    * 不是*，如果s和p的当前字符相同，判断s和p的下一位
+    * 是*，若p的当前字符是'.'，则可以匹配到s的末尾；否则，用p的当前字符一直去匹配s，若p当前字符等于s当前字符，判断若p重复0次s和p是否能匹配；若能则跳出循环，若不能，用p当前字符继续匹配s的下一位。当p的当前字符终于和s的当前字符不相等时，则返回p后面的字符串和s是否匹配。
 
 ```cpp
 class Solution {
