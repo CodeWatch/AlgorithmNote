@@ -137,8 +137,14 @@ public:
         } 
         else
         {
-            n = -n;
-            double half = pow(x, n/2);
+            int halfN = 0;
+            if(n == INT_MIN){
+                long long newN = INT_MAX + 1;
+                newN = newN / 2;
+            }else{
+                halfN = (-n) / 2;
+            }
+            double half = pow(x, halfN);
             if(n%2 == 0) return 1.0/(half*half);
             else return 1.0/(half*half*x);
         }
