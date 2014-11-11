@@ -196,3 +196,62 @@ int main(){
 <a name="Anchor3" id="Anchor3"></a>
 -**[Overlapped Rectangles Area]**([Back to Index](#AnchorIndex))
 
+在二维平面中存在若干个矩形，这些矩形可能有交叠，给定每个矩形的右上角及左下角坐标，求这些矩形的总面积（交叠部分只计算一次）。  
+
+可以利用切割的思想进行，如下图所示：
+![Overlapped Rectangles Area](Image/Overlapped Rectangles Area.png "Overlapped Rectangles Area") 
+
+首先分别获得这些矩形的坐标集合setx和sety，从而确定了分割的基准线。接下来对setx和sety中的值进行排序，这样做的目的是在接下来的算法中对于x和y每次能够选择相邻的基准线，从而获得最小的矩形。对小矩形进行判断，看是否在输入给定的任意一个矩形中，如果在，则其面积应该计算在最后的总和中；如果不在任意一个矩形中，则抛弃该矩形。
+
+算法实现如下：
+```cpp
+class Rect{
+    public:
+    int x1,y1,x2,y2;
+    Rect(int _x1, int _y1, int _x2, int _y2):x1(_x1),y1(_y1),x2(_x2),y2(_y2){}
+    ~Rect();
+}
+
+int CalculateTotalArea(Vector<Rect> inputRects){
+    int n = inputRects.size();
+    if(n <= 0) return 0;    
+    set<int> setx, sety;
+    // collect setx and sety
+    for(int i = 0; i <= n-1; i++){
+        setx.insert(inputRects[i].x1);
+        setx.insert(inputRects[i].x2);
+        sety.insert(inputRects[i].y1);
+        sety.insert(inputRects[i].y2);
+    }
+    vector<int> vecx,vecy;
+    for(set<int>::iterator itr = setx.begin(); itr != setx.end(); itr++){
+        vecx.push_back(*itr);
+    }
+    sort(vecx.begin(),vecx.end());
+    for(set<int>::iterator itr = sety.begin(); itr != sety.end(); itr++){
+        vecy.push_back(*itr);
+    }
+    sort(vecy.begin(),vecy.end());
+
+    int totalArea = 0;
+    for(int i = 0; i <= vecx.size()-2; i++){
+        for(int j = 0; j <= vecy.size()-2; j++){
+            Rect smallRect(vecx[i],vecy[j],vecx[i+1],vecy[j+1]);
+            if(judgeSmallRect(inputRects, smallRect)){
+                totalArea += (vecx[i+1] - vecx[i]) * (vecy[j+1] - vecy[j]);
+             }
+        }
+    }
+
+    return totalArea;
+}
+
+bool judgeSmallRect(vector<int> inputRects, Rect smallRect){
+    for(int i = 0; i <= (int)inputRects.size()-1; i++){
+        if(smallRect.x1 <= inputRects[i].x1 && smallRect.x1 >= inputRects[i].x2 && smallRect.x2 <= inputRects[i].x1 && smallRect.x2 >= inputRects[i].x1 && smallRect.y1 <= inputRects[i].y1 && smallRect.y1 >= inputRects[i].y2 && smallRect.y2 <= inputRects[i].y1 && smallRect.y2 >= inputRects[i].y2){
+            return true;
+        }
+    }
+    return false;
+}
+```
