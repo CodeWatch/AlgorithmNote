@@ -1,7 +1,7 @@
 ##Tree & Linkedlist
 <a name="AnchorIndex" id="AnchorIndex"></a>
 Index:  
--[*TODO*::Delete one node from BST](#Anchor1)  
+-[Delete one node from BST](#Anchor1)  
 -[Transfer BST to sorted double linked list](#Anchor2)  
 -[LCA](#Anchor3)  
 -[*TODO*::Judge two tree are the same under swap operation](#Anchor4)  
@@ -14,7 +14,60 @@ Index:
 -------
 <a name="Anchor1" id="Anchor1"></a>
 -**[Delete one node from BST]**([Back to Index](#AnchorIndex))  
+从一个二叉搜索树中删除一个指定节点，但要求删除后的二叉搜索树继续保持其性质。  
 
+BST有个重要的性质是其中序遍历的结果为升序序列，因此考虑寻找目标删除节点在中序遍历中的上一个节点或下一个节点，将二者值交换来达到删除的目的。假设TreeNode中有指向父节点的指针。
+
+```cpp
+void deleteTreeNode(TreeNode * target){
+    // NULL tree need not delete
+    if(target == NULL){
+        return;
+    }
+    // find previous node in the left sub-tree
+    if(target->left != NULL){
+        TreeNode * preNode = target->left;
+        while(preNode->right != NULL){
+            preNode = preNode->right;
+        }
+        target->val = preNode->val;
+        // no matter preNode->left is NULL or not, hang it to its parent
+        if(preNode->parent->right == preNode){
+            preNode->parent->right = preNode->left;
+        }else{
+            preNode->parent->left = preNode->left;
+        }
+        delete preNode;
+    }else if(target->right != NULL){// find next node in the right sub-tree
+        TreeNode * nextNode = target->right;
+        while(nextNode->left != NULL){
+            nextNode = nextNode->left;
+        }
+        target->val = nextNode->val;
+
+        if(nextNode->parent->left == nextNode){
+            nextNode->parent->left = nextNode->right;
+        }else{
+            nextNode->parent->right = nextNode->right;
+        }
+        delete nextNode;
+    }else{// it's a leaf itself
+        if(target->parent == NULL){
+            delete target;
+        }else{
+            TreeNode * parent = target->parent;
+            if(target->parent->left == target){
+                parent->left = NULL;
+                delete target;
+            }else{
+                parent->right = NULL;
+                delete target;
+            }
+        }
+    }
+}
+
+```
 
 -------
 <a name="Anchor2" id="Anchor2"></a>

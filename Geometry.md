@@ -3,7 +3,7 @@
 Index:  
 -[Leetcode:Max Points on a Line](#Anchor1)  
 -[Outer Points of Rectangles](#Anchor2)  
--[*TODO*::Overlapped Rectangles Area](#Anchor3) 
+-[Overlapped Rectangles Area](#Anchor3) 
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
