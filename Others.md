@@ -5,7 +5,7 @@ Index:
 -[Leetcode:Gray Code](#Anchor2)  
 -[Leetcode:Pow(x, n)](#Anchor3)  
 -[Leetcode:Sqrt(x)](#Anchor4)  
--[*TODO*::Leetcode:Valid Number](#Anchor5)  
+-[Leetcode:Valid Number](#Anchor5)  
 -[Four Color Theorem](#Anchor6)  
 -[Count number of digit 1 from 1 to n](#Anchor7)  
 
@@ -187,6 +187,55 @@ public:
 <a name="Anchor5" id="Anchor5"></a>
 -**[Leetcode:Valid Number](oj.leetcode.com/problems/valid-number/)**([Back to Index](#AnchorIndex)) 
 
+判断一个字符串是否为合法的数，包括带科学计数法的整数，小数等。思路是使用几个状态变量来表示目前已处理的部分的状态，当状态出现矛盾或违规时返回错误即可，包括：空格已出现isSpace，第一部分出现isFirst，第二部分（以E/e作为分割）出现isSecond，
+E/e出现isE， 小数点出现isDot。控制好这5个变量即可。
+
+```cpp
+bool isNumber(const char* s){
+    if(s == NULL) return false;
+    while(*s == ' ') s++;
+    if(*s == '+' || *s == '-') s++;
+    bool isSpace = false, isFirst = false, isSecond = false, isE = false, isDot = false;
+    while(*s != '\0'){
+        if(*s == '.'){
+            if(isSpace || isE || isDot){
+                return false;
+            }else{
+                isDot = true;
+            }
+        }else if(*s == 'E' || *s == 'e'){
+            if(isSpace || isE || !isFirst){
+                return false;
+            }else{
+                isE = true;
+            }
+        }else if(*s == ' '){
+            isSpace = true;
+        }else if(*s == '+' || *s == '-'){
+            is(isSpace) return false;
+            if(*(s-1) != 'E' || *(s-1) != 'e') return false;
+        }else if(*s <= '9' && *s >= '0'){
+            if(isSpace) return false;
+            if(isE){
+                isSecond = true;
+            }else{
+                isFirst = true;
+            }
+        }else{
+            return false;
+        }
+        s++;
+    }
+
+    if(!FirstPart){
+        return false;
+    }else if(isE && !isSecond){
+        return false;
+    }else{
+        return true;
+    }
+}
+```
 -------
 <a name="Anchor6" id="Anchor6"></a>
 -**[Four Color Theorem]**([Back to Index](#AnchorIndex)) 
