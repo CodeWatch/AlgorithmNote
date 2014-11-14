@@ -9,7 +9,7 @@ Index:
 -[Leetcode:Flatten Binary Tree to Linked List](#Anchor6)  
 -[Leetcode:Construct Binary Tree from Inorder and Postorder Traversal](#Anchor7)  
 -[Leetcode:Recover Binary Search Tree](#Anchor8)  
--[*TODO*::LeetCode:Binary Tree Maximum Path Sum](#Anchor9)  
+-[LeetCode:Binary Tree Maximum Path Sum](#Anchor9)  
 -[Judge one tree is BST under swap operation](#Anchor10)  
 
 -------
@@ -318,6 +318,45 @@ public:
 -------
 <a name="Anchor9" id="Anchor9"></a>
 -**[LeetCode:Binary Tree Maximum Path Sum](http://oj.leetcode.com/problems/binary-tree-maximum-path-sum/)**([Back to Index](#AnchorIndex))   
+
+利用find()方法返回值携带以当前节点向根节点出发的简单路径的最大值，利用传引用携带求解的最大路径值。
+
+简单路径的最大值的更新方法为从下述3个值中取最大：
+    
+    * 当前节点值
+    * 当前节点 + 左子树中简单路径的最大值（包含左子树根节点）
+    * 当前节点 + 右子树中简单路径的最大值（包含右子树根节点）
+
+最大路径（求解值）的更新方法为从下述6个值中取最大：
+    
+    * 左子树最大路径
+    * 右子树最大路径
+    * 根节点值
+    * 根节点值 + 左子树简单路径最大值
+    * 根节点值 + 右子树简单路径最大值
+    * 根节点值 + 左子树简单路径最大值 + 右子树简单路径最大值
+
+```cpp
+int maxPathSum(TreeNode *root) {
+    int pathMax = 0x80000000;
+    find(root, pathMax);
+    return pathMax;
+}
+
+int find(TreeNode * root, int & pathMax){
+    if(root == NULL){
+        return 0;
+    }
+    int leftMax = find(root->left, pathMax); // simple path
+    int rightMax = find(root->right, pathMax);
+    int ret = max(leftMax + root->val, rightMax + root->val);
+    ret = max(ret, root->val);
+    int tempMax = max(root->val , root->val + leftMax);
+    tempMax = max(tempMax, tempMax + rightMax);
+    pathMax = max(pathMax, tempMax);
+    return ret;
+}
+```
 
 -------
 <a name="Anchor10" id="Anchor10"></a>
