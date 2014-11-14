@@ -4,7 +4,7 @@ Index:
 -[Delete one node from BST](#Anchor1)  
 -[Transfer BST to sorted double linked list](#Anchor2)  
 -[LCA](#Anchor3)  
--[*TODO*::Judge two tree are the same under swap operation](#Anchor4)  
+-[Judge two tree are the same under swap operation](#Anchor4)  
 -[Leetcode:Binary Tree Zigzag Level Order Traversal](#Anchor5)   
 -[Leetcode:Flatten Binary Tree to Linked List](#Anchor6)  
 -[Leetcode:Construct Binary Tree from Inorder and Postorder Traversal](#Anchor7)  
@@ -136,6 +136,25 @@ TreeNode* getLCA(TreeNode* root, TreeNode* X, TreeNode *Y) {
 -------
 <a name="Anchor4" id="Anchor4"></a>
 -**[Judge two tree are the same under swap operation]**([Back to Index](#AnchorIndex))  
+
+定义一种交换操作，可以任意交换树中某节点的左右子树。现给定两棵树，求解是否存在某种交换方法，使得两棵树相同。  
+
+用递归的思想解决这个问题，假设给定一个方法能够判断分别来自两棵树的子树能够通过交换操作变形为相同，则要么两棵子的左左和右右子树对应相同（在进行交换操作的前提下），要么两棵子树的左右，右左子树对应相同（同样在进行交换操作的前提下），这样就把问题转换为更小的子问题。递归出口是当两棵树为空树时，定义这两棵树能够通过交换变为相同。
+
+```cpp
+bool canSwapToSame(TreeNode * r1, TreeNode * r2){
+    if(r1 == NULL && r2 == NULL) return true;
+    if(r1 == NULL || r2 == NULL) return false;
+    if(r1->val != r2->val) return false;
+    if(canSwapToSame(r1->left,r2->left)&&canSwapToSame(r1->right,r2->right)){
+        return true;
+    }
+    if(canSwapToSame(r1->left,r2->right)&&canSwapToSame(r1->right,r2->left)){
+        return true;
+    }
+    return false;
+}
+```
 
 -------
 <a name="Anchor5" id="Anchor5"></a>
