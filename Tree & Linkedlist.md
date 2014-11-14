@@ -10,7 +10,7 @@ Index:
 -[Leetcode:Construct Binary Tree from Inorder and Postorder Traversal](#Anchor7)  
 -[Leetcode:Recover Binary Search Tree](#Anchor8)  
 -[*TODO*::LeetCode:Binary Tree Maximum Path Sum](#Anchor9)  
--[*TODO*::Judge one tree is BST under swap operation](#Anchor10)  
+-[Judge one tree is BST under swap operation](#Anchor10)  
 
 -------
 <a name="Anchor1" id="Anchor1"></a>
@@ -322,3 +322,63 @@ public:
 -------
 <a name="Anchor10" id="Anchor10"></a>
 -**[Judge one tree is BST under swap operation]**([Back to Index](#AnchorIndex))   
+这里定义的交换操作与[Judge two tree are the same under swap operation](#Anchor4)定义的相同。给定一棵树，每个节点存有一个整数，判断这棵树是否能够通过某种交换操作序列变换为BST。
+
+考虑BST的性质：对于某个节点来说，其左子树为BST且其所有节点的值都小于该节点值，其右子树为BST且所有节点的值都大于该节点值。将这个性质与交换操作结合起来即为解题思路。在判断左右子树是否能通过交换操作变换为BST的同时，使用传引用返回左子树和右子树的最大最小值，判断交换和不交换两种情况下能否使得以当前节点为根的子树BST性质成立即可，如果两种情况都无法满足BST性质，则返回false。递归出口是对于空节点进行特判，并在后续的调用过程中不对空节点进行递归（简便起见，可以有别的实现方式）。
+
+```cpp
+bool canSwapToBST(TreeNode * root, int & maxVal, int & minVal){
+    if(root == NULL){
+        return false;
+    }
+    int leftMin,leftMax,rightMin,rightMax;
+    bool isLeftValid, isRightValid;
+    if(root->left != NULL){
+        isLeftValid = true;
+        if(!canSwapToBST(root->left, leftMax, leftMin)){
+            return false;
+        }
+    }else{
+        isLeftValid = false;
+    }
+    if(root->right != NULL){
+        isRightValid = true;
+        if(!canSwapToBST(root->right, rightMax, rightMin)){
+            return false;
+        }
+    }else{
+        isRightValid = false;
+    }
+    //now we can know that the left and right sub-tree are NULL or BST
+    if(isLeftValid && isRightValid){
+        if(leftMax < root->val && rightMin > root->val
+        ||rightMax < root->val && leftMin > root->val){
+            maxVal = max(leftMax, rightMax);
+            minVal = min(leftMin, rightMin);
+            return true;
+        }else{
+            return false;
+        } 
+    }else if(isLeftValid){
+        if(leftMax < root->val || leftMin > root->val){
+            maxVal = max(root->val, leftMax);
+            minVal = min(root->val, leftMin);
+            return true;
+        }else{
+            return false;
+        }
+    }else if(isRightValid){
+        if(rightMin > root->val || rightMax < root->val){
+            maxVal = max(root->val, rightMax);
+            minVal = min(root->val, rightMin);
+            return true;
+        }else{
+            return false;
+        }
+    }else{
+        //leaf node
+        maxVal = minVal = root->val;
+        return true;
+    }
+}
+```
