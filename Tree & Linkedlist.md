@@ -319,9 +319,9 @@ public:
 <a name="Anchor9" id="Anchor9"></a>
 -**[LeetCode:Binary Tree Maximum Path Sum](http://oj.leetcode.com/problems/binary-tree-maximum-path-sum/)**([Back to Index](#AnchorIndex))   
 
-利用find()方法返回值携带以当前节点向根节点出发的简单路径的最大值，利用传引用携带求解的最大路径值。
+利用find()方法返回值携带以当前节点向叶子节点出发的简单路径的最大值，利用传引用携带求解的最大路径值。
 
-简单路径的最大值的更新方法为从下述3个值中取最大：
+包含当前节点的简单路径的最大值的更新方法为从下述3个值中取最大：
     
     * 当前节点值
     * 当前节点 + 左子树中简单路径的最大值（包含左子树根节点）
