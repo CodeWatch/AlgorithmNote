@@ -6,7 +6,7 @@ Index:
 -[LeetCode:Interleaving String](#Anchor3)  
 -[LeetCode:Wildcard Matching](#Anchor4)  
 -[LeetCode:Trapping Rain Water](#Anchor5)  
--[*TODO*::Leetcode:Palindrome Partitioning II](#Anchor6)  
+-[Leetcode:Palindrome Partitioning II](#Anchor6)  
 -[*TODO*::Leetcode:Longest Palindromic Substring](#Anchor7)  
 -[Leetcode:Distinct Subsequences](#Anchor8)  
 -[LCS](#Anchor9)  
@@ -254,6 +254,42 @@ public:
 <a name="Anchor6" id="Anchor6"></a>
 -**[Leetcode:Palindrome Partitioning II](http://oj.leetcode.com/problems/palindrome-partitioning-ii/)**([Back to Index](#AnchorIndex))  
  
+参考[LeetCode:Palindrome Partitioning](#Anchor12)的做法可以在O(n^2)的时间内求出字符串s的所有子串是否为回文串的信息，matrix[i][j]表示字符串s的下标从i到j的子串是否为回文串，dp转移方程略。
+
+在获得上述信息的情况下，使用另外一个一维数组来求解最小切分数。dp[i]表示下标从i到len-1的子串能够被分为多少个回文断，则我们要求解的最终目标变成了dp[0]-1，该dp转移方程为：
+
+    * dp[i] = min(dp[i], dp[j+1]+1), if matrix[i][j] == true
+
+每当我们确定i到j为一个回文子串，我们尝试比较dp[i]和dp[j+1]+1的值，最终求出目标值。
+
+```cpp
+class Solution {
+public:
+    int minCut(string s) {
+        int len = s.size();  
+        int* dp = new int[len+1];  
+        for(int i=len; i>=0; i--)  
+            dp[i] = len-i;  
+        bool** matrix = new bool*[len];  
+        for(int i=0; i<len; i++)  
+        {  
+            matrix[i] = new bool[len];  
+            memset(matrix[i], false, sizeof(bool)*len);  
+        }  
+        for(int i=len-1; i>=0; i--)  
+            for(int j=i; j<len; j++)  
+            {  
+                if(s[i] == s[j] && (j-i<2 || matrix[i+1][j-1]))  
+                {  
+                    matrix[i][j] = true;  
+                    dp[i] = min(dp[i], dp[j+1]+1);  
+                }  
+            }  
+        return dp[0]-1;  
+    } 
+};
+```
+
 -------
 <a name="Anchor7" id="Anchor7"></a>
 -**[Leetcode:Longest Palindromic Substring](http://oj.leetcode.com/problems/longest-palindromic-substring/)**([Back to Index](#AnchorIndex))  
@@ -542,6 +578,7 @@ public:
         if(n == 0) return ret;
         CalculateIsPalindrome();
         dfs(s, 0, ret, trace);
+        return ret;
     }
 
     void dfs(string s, int index, vector<vector<string>> &ret, vector<string> &trace){
