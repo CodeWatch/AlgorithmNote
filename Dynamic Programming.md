@@ -12,7 +12,7 @@ Index:
 -[LCS](#Anchor9)  
 -[*TODO*::LIS](#Anchor10)  
 -[LeetCode:Edit Distance](#Anchor11)  
--[*TODO*::LeetCode:Palindrome Partitioning](#Anchor12)  
+-[LeetCode:Palindrome Partitioning](#Anchor12)  
 -[Divide Array To Make Two Equal Part](#Anchor13)  
 
 -------
@@ -509,6 +509,60 @@ public:
 <a name="Anchor12" id="Anchor12"></a>
 -**[LeetCode:Palindrome Partitioning](http://oj.leetcode.com/problems/palindrome-partitioning/)([Back to Index](#AnchorIndex)) 
 
+首先使用dp的方式获得字符串s的任意子串是否为回文串，这个过程会花费O(n^2)的时间，其中n为字符串s的长度。dp[i][j]表示下标从i到j的子串是否为回文串，递归转移方程如下：
+    
+    * dp[i][j] = true , if s[i] == s[j] && (j-i <= 1 || dp[i+1][j-1] == true)
+               = false , otherwise
+
+```cpp
+bool dp[n][n];
+void CalculateIsPalindrome(){
+    for(int i = n-1; i >=0 ; i--){
+        for(int j = i; j <= n-1; j++){
+            if(s[i] == s[j] && (j - i <= 1 || dp[i+1][j-1] == true)){
+                dp[i][j] = true;
+            }else{
+                dp[i][j] = false;
+            }
+        }
+    }
+}
+```
+
+接下来使用DFS求解，每次递归中对当前字符串取从头部开始的子串，如果该子串为回文串，则对剩余部分进行递归。
+
+```cpp
+class Solution {
+public:
+    vector<vector<string>> partition(string s) {
+        vector<string> trace;
+        vector<vector<string>> ret;
+        
+        int n = s.size();
+        if(n == 0) return ret;
+        CalculateIsPalindrome();
+        dfs(s, 0, ret, trace);
+    }
+
+    void dfs(string s, int index, vector<vector<string>> &ret, vector<string> &trace){
+        int n = s.size();
+        if(index == n){
+            ret.push_back(trace);
+            return;
+        }
+        for(int i = index; i <= n-1; i++){
+            string sub = s.substr(index,i-index+1);
+            if(isPal[index][i] == 1){
+                trace.push_back(sub);
+                find(s, i+1, ret, trace, isPal);
+                trace.pop_back();
+            }
+        }
+        return;
+    } 
+};
+
+```
 -------
 <a name="Anchor13" id="Anchor13"></a>
 -**[Divide Array To Make Two Equal Part]([Back to Index](#AnchorIndex)) 
