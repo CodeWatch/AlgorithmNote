@@ -10,7 +10,7 @@ Index:
 -[*TODO*::Leetcode:Longest Palindromic Substring](#Anchor7)  
 -[Leetcode:Distinct Subsequences](#Anchor8)  
 -[LCS](#Anchor9)  
--[*TODO*::LIS](#Anchor10)  
+-[LIS](#Anchor10)  
 -[LeetCode:Edit Distance](#Anchor11)  
 -[LeetCode:Palindrome Partitioning](#Anchor12)  
 -[Divide Array To Make Two Equal Part](#Anchor13)  
@@ -442,67 +442,87 @@ public class MyOwn {
         for (i = l.size() - 1; i >= 0; i--)
             System.out.print(a[l.get(i)] + " ");
     }
-
-    public static void main(String[] args) {
-        MyOwn m = new MyOwn();
-        char[] a = { 'c', 'n', 'b', 'l', 'o', 'g', 's' };
-        char[] b = { 'b', 'e', 'l', 'o', 'n', 'g' };
-        m.LCS(a, b);
-    }
 }
 ```  
 
 -------
 <a name="Anchor10" id="Anchor10"></a>
 -**[LIS]**([Back to Index](#AnchorIndex)) 
-最长上升子序列（LIS），给出一个序列a1,a2,a3,a4,a5,a6,a7….an,求它的一个子序列（设为s1,s2,…sn），使得这个子序列满足这样的性质，s1,s2,s3…sn递增并且这个子序列的长度最长。输出这个最长的长度。
+最长上升子序列（LIS），给出一个序列a1,a2,a3,a4,a5,a6,a7….an,求它的一个子序列（设为s1,s2,…sn），使得这个子序列满足这样的性质，s1,s2,s3…sn递增并且这个子序列的长度最长。输出这个最长的长度。等效问题：求解一个数列中需要调整（取出一个数并插入新的位置）的最少次数使得该数列有序，一次调整操作如将1,2,4,6,5,3变换为1,2,3,4,6,5。
   
-又一个经典的动态规划问题。不同的是这次使用的是一维数组，空间复杂度下降了，dp依旧记录状态，只不过记录的状态很特别，dp[i]
-=j表示长度为i的递增子序列的最后一个数是j。在对原数组遍历的过程中，每一次都要将a[i]更新到dp的对应位置去。比如a[4]=3，而dp[1]=2，dp[2]=4,表示长度为1的递增子序列最后一个数是2,长度为2的递增子序列最后一个数是4，此时就可以将dp[2]更新为3,因为长度为1的递增子序列最后一位为2,3大于2，所以序列长度加一，最后一位为3,3小于4，所以将dp[2]更新为3.由此可见dp是一个单调递增数组，所以在修改的时候可以采用二分查找，这样时间复杂度就降为nlogn。如果dp中没有比a[i]大的，则说明最长递增子序列的长度增加了一位。
+如果仅仅是求解LIS的长度，可以使用一个栈模拟当前最大递增子序列的长度，当元素大于栈顶，最长序列+1，否则替换第一个比该元素大的栈内元素，保持栈内序列的“最大潜力”，该解法的时间复杂度为O(nlgn)。例如对于1,2,3,6,4序列，1、2和3顺序入栈，代表当前最大长度为3，当遍历到6时，仍然大于栈顶，入栈，当前最大长度为4，当遍历到4时，寻找第一个比4大的元素并替换，栈内为1,2,3,4，故最大长度为4。但需要注意的是，该算法结束后栈内的序列并不是我们所求的LIS，仅仅是长度相同而已。
 
-Add by[@sc703bupt](https://github.com/sc703bupt): 实际上[@popolou](https://github.com/popolou)的解法是贪心法，使用了一个栈模拟当前最大递增子序列的长度，当元素大于栈顶，最长序列+1，否则替换第一个比该元素大的栈内元素，保持栈内序列的“最大潜力”，该解法的时间复杂度为O(nlgn)。例如对于1,2,3,6,4序列，1、2和3顺序入栈，代表当前最大长度为3，当遍历到6时，仍然大于栈顶，入栈，当前最大长度为4，当遍历到4时，寻找第一个比4大的元素并替换，栈内为1,2,3,4，故最大长度为4
-
-Add by[@sc703bupt](https://github.com/sc703bupt): 等效问题：求解一个数列中需要调整的最少次数使得该数列有序，一次调整操作如将1,2,4,6,5,3变换为1,2,3,4,6,5。
-
-```java
-import java.util.ArrayList;
-
-public class MyOwn1 {
-    public void LIS(int[] a) {
-        int len = a.length;
-        int[] b = new int[len + 1];
-        b[1] = a[0];
-        int max = 1;
-        ArrayList<Integer> result = new ArrayList<Integer>();
-        for (int i = 1; i < len; i++) {
-            int start = 1;
-            int end = max;
-            while (start <= end) {
-                int middle = (start + end) / 2;
-                if (b[middle] < a[i])
-                    start = middle + 1;
-                else if (b[middle] > a[i])
-                    end = middle - 1;
-            }
-            b[start] = a[i];
-            if (start > max) {
-                max++;
-                result.clear();
-                for (int j = 1; j <= max; j++)
-                    result.add(b[j]);
+```cpp
+int LIS(int A[], int n){
+    vector<int> vec;//这里我们是用一个vector来模拟stack，方便二分查找
+    for(int i= 0; i <= n-1;i++){
+        if(vec.empty()||A[i]>=vec.back()){
+            vec.push_back(A[i]);
+        }else{
+            int start = 0, end = vec.size()-1;
+            while(start <= end){
+                if(start == end){
+                    if(vec[start] > A[i]){
+                        vec[start] = A[i];
+                    }else if(vec[start]<A[i]){
+                        vec[start+1] = A[i];
+                    }else if(vec[start] == A[i]){
+                        break;
+                    }
+                }
+                int mid = (start + end) / 2;
+                if(vec[mid] == A[i]){
+                    break;
+                }else if(vec[mid] < A[i]){
+                    start = mid + 1;
+                }else{
+                    end = mid - 1;
+                }
             }
         }
-        System.out.println("result: " + max);
-        System.out.println(result);
     }
-
-    public static void main(String[] args) {
-        MyOwn1 m = new MyOwn1();
-        int[] a = { 2, 1, 5, 3, 6, 4, 8, 9, 7 };
-        m.LIS(a);
-    }
+    return vec.size();
 }
 ```
+
+如果变更题目要求：求LIS序列，则存在动态规划解法。假设dp[i]记录了以A[i]结尾的最长上升子序列的长度，假设输入数组A的长度为n，则该动态转移方程为：
+    
+    * dp[i] = max(dp[k] + 1), 0 <= k <= i-1, A[i] > A[k], 0 <= i <= n-1
+
+同时因为我们需要求解该LIS序列，则使用lastPos[i]来记录以A[i]结尾的最长上升子序列的倒数第二元素的位置，也即该上升序列中排在A[i]前一个的元素，每次更新dp[i]时更新lastPos[i]，在计算dp[i]完成后，从后向前还原LIS序列。
+
+```cpp
+vector<int> LIS(int A[], int n){
+    if(n <= 0) return;
+    int dp[n]; // dp[i] records len of LIS using A[i] as the last element 
+    int lastPos[n]; // lastPos[i] records the previous element in the LIS using A[i] as the last element
+    for(int i = 0; i <= n-1; i++){
+        dp[i] = 1;// at least 1
+        lastPos[i] = 0;// whatever
+    }
+    int lenOfMaxLIS = 0, lastPosOfMaxLIS = 0;
+    for(int i = 1; i <= n-1; i++){
+        for(int j = 0; j <= i-1; j++){
+            if(A[j] > A[i] && dp[j] + 1 > dp[i]){
+                dp[i] = dp[j] + 1;
+                lastPos[i] = j;
+                if(dp[i] > lenOfMaxLIS){ // update global info
+                    lenOfMaxLIS = dp[i];
+                    lastPosOfMaxLIS = i;
+                }
+            }
+        }
+    }
+    vector<int> lisVector;
+    for(int i = lastPosOfMaxLIS; i >= 0; ){
+        lisVector.push_back(A[i]);
+        i = lastPos[i];
+    }
+    reverse(lisVector.begin(), lisVector.end());
+    return lisVector;
+}
+```
+那么求解LIS序列也存在O(nlogn)的解法，使用了特殊的数据结构，待续。  
 
 -------
 <a name="Anchor11" id="Anchor11"></a>
