@@ -23,7 +23,8 @@ Index:
 -[Leetcode:Regular Expression Matching](#Anchor20)  
 -[Leetcode:Simplify Path](#Anchor21)  
 -[Leetcode:Text Justification](#Anchor22)  
-
+-[Leetcode:Search for a Range](#Anchor23)   
+-[Leetcode:Minimum Window Substring](#Anchor24)  
 -------
 <a name="Anchor1" id="Anchor1"></a>
 -**[Leetcode:single number II](http://oj.leetcode.com/problems/single-number-ii/)**([Back to Index](#AnchorIndex))    
@@ -1145,3 +1146,12 @@ public class Solution {
     }  
 }
 ```
+
+-------
+<a name="Anchor23" id="Anchor23"></a>
+-**[Leetcode:Search for a Range](https://oj.leetcode.com/problems/search-for-a-range/)**([Back to Index](#AnchorIndex))    
+
+
+-------
+<a name="Anchor24" id="Anchor24"></a>
+-**[Leetcode:Minimum Window Substring](https://oj.leetcode.com/problems/minimum-window-substring/)**([Back to Index](#AnchorIndex))   
