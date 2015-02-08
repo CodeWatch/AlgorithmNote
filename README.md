@@ -20,14 +20,14 @@ Chapters
 9. [Probability](Probability.md)
 10. [Others](Others.md)  
 
-####Engineering
-1. Website construction  
+####Engineering 
 
 ####Basic Knowledge
 1. [Basic Java Concepts](Basic Java Concepts.md) 
 2. [NIO](NIO.md)
 3. [Big Data Processing](Big Data Processing.md)
 4. [Functions In string.h](Functions in string.h.md)
+5. [Git Note & Cheatsheet](Git Note & Cheatsheet.md)
 
 Core contributors
 ------------
