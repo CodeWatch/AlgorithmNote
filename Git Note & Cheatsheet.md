@@ -1,4 +1,4 @@
-##Greedy Strategy
+##Git Note & Cheatsheet
 
 本文是在阅读完OSChina对Pro Git的翻译版后整理的笔记和Cheatsheet。  
 [OSChina Progit阅读地址](http://git.oschina.net/progit/)  
@@ -13,7 +13,13 @@
 `git config --list` ：查询所有的Git配置信息  
 `git config [setting option]` ：查询某配置信息，如user.name  
 `git clone [target git repository]` ：从目标克隆指定仓库  
-`git add [file/folder]` ：
+`git init` ：Git仓库初始化  
+`git add [file/folder]` ：将指定文件加入暂存区  
+`git status` ：查看暂存区状态  
+`git diff` ：比较**工作目录**和**暂存区快照**的差异  
+`git diff --staged` ：比较**上次提交的快照**和**暂存区快照**的差异  
+`git commit -m [commit message]` ：提交暂存区中的文件  
+`git commit -a` ：git add -A + git commit
 
 -------
 ###配置文件
