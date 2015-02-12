@@ -7,7 +7,7 @@ Index:
 -[LeetCode:Wildcard Matching](#Anchor4)  
 -[LeetCode:Trapping Rain Water](#Anchor5)  
 -[Leetcode:Palindrome Partitioning II](#Anchor6)  
--[*TODO*::Leetcode:Longest Palindromic Substring](#Anchor7)  
+-[Leetcode:Longest Palindromic Substring](#Anchor7)  
 -[Leetcode:Distinct Subsequences](#Anchor8)  
 -[LCS](#Anchor9)  
 -[LIS](#Anchor10)  
@@ -294,56 +294,85 @@ public:
 <a name="Anchor7" id="Anchor7"></a>
 -**[Leetcode:Longest Palindromic Substring](http://oj.leetcode.com/problems/longest-palindromic-substring/)**([Back to Index](#AnchorIndex))  
 
-普通的方法n方时间复杂度是不可取的。这里介绍一种O(n)的方法。本方法使用之前计算过的回文长度计算以当前字符为中心的最大回文长度。首先进行预处理，预处理的目的是计算回文时不分开考虑奇偶的情况。保存两个变量，C为中轴，R为最右，R以C为轴对称。每次遍历到i，计算出i相对于轴C的镜像i'。因为R以C为轴对称，所以以i为中心的回文串长度是R-i和以i'为中心回文串长度的最小值。之后长度若能扩展则继续扩展。然后根据i更新最右R。  
+O(n^3)暴力法略过不提，O(n^2)的方法可以参考[LeetCode:Palindrome Partitioning](#Anchor12)，在计算所有子串是否是回文串的过程中得到最长回文子串。
+
+下面介绍的方法为Manacher算法，可以在O(n)时间内求出最长回文子串。该算法的核心思想是**利用已有的最长回文子串简化后续求解过程**。首先定义三个变量：
+
+    * lpsCenter： 已有的最长回文子串的中心位置
+    * lpsRadius： 已有的最长回文子串的半径(从中心位置到边缘，包括中心位置)
+    * P[i]: 记录了以下标i为中心的最长回文子串的半径
+
+另外，需要对原字符串做一定的预处理，也即在原字符串中插入特定字符（如'#'）使得我们总是在处理长度为奇数的字符串，统一了奇偶情况：
+    
+    * "abcde" => "#a#b#c#d#e#"
+    * "abba" => "#a#b#b#a#"
+
+如果算法能够得到lpsCenter和lpsRadius，就能够还原出原字符串中的最长回文子串。接下来将结合图片来解释该算法的核心。
+
+当我们已经得到以0到i-1下标为中心的最长回文子串半径P[k], k∈[0,i-1]，且从中得到了lpsCenter和lpsRadius，若i满足一定条件时，则计算P[i]时可以利用已有的信息。对于Case 1，j为i关于lpsCenter对称位置，也即
+
+    * lpsCenter - j == i - lpsCenter => j = 2 * lpsCenter - i
+
+![Manacher Case 1](Image/picForManacherCase1.png "Manacher Case 1")  
+
+在Case 1，容易看出以j为中心的回文子串保证了以i为中心也**至少**存在相同的回文子串，这是由于当前最长回文子串的lpsRadius（实际上就是P[lpsCenter]）与P[j]的大小关系决定了，也即**P[i] >= P[j]**
+
+![Manacher Case 2](Image/picForManacherCase2.png "Manacher Case 2")  
+
+在Case 2，当前最长回文子串的lpsRadius与P[j]的大小关系无法保证以i为中心的回文子串与以j为中心的一致，则此时**P[i] >= mx-i**
+
+对于i < mx 而言，上述两种情况仅仅是得到了P[i]的下界，对于i+P[i]和i-P[i]以外的情况，仍然需要逐个字符比较得到。
+
+如果i本身已经超出当前最大回文子串的覆盖半径(i >= mx)如何处理？简单的令P[i] = 1,接下来逐字符比较即可。
 
 ```cpp
-class Solution {
-public:
-    // Transform S into T.
-    // For example, S = "abba", T = "^#a#b#b#a#$".
-    // ^ and $ signs are sentinels appended to each end to avoid bounds checking
-
-    string preProcess(string s) {
-        int n = s.length();
-        if (n == 0) return "^$";
-        string ret = "^";
-        for (int i = 0; i < n; i++) ret += "#" + s.substr(i, 1);
-        ret += "#$";
-        return ret;
+// Suppose we have no '#' in the original string s
+string LPS(string s){
+    if(s.size() == 0) return "";
+    string t = preProcess(s);
+    int n = t.size();
+    int P[n];
+    memset(P, 0, sizeof(P));
+    int mx = 0, lpsCenter = 0;
+    for(int i = 1; i <= n-1; i++){
+        int j = 2 * lpsCenter - i;
+        if(mx > i){
+            P[i] = min(P[j], mx - i);
+        }else{
+            P[i] = 1;
+        }
+        //Search more
+        while(t[i-P[i]] == t[i+P[i]]){
+            P[i]++;
+        }
+        //Update global info
+        if(i+P[i] > mx){
+            mx = i + P[i];
+            lpsCenter = i;
+        }
     }
 
-    string longestPalindrome(string s) {
-        string T = preProcess(s);
-        const int n = T.length();
-        // 以T[i] 为中心，向左/右扩张的长度，不包含T[i] 自己，
-        // 因此P[i] 是源字符串中回文串的长度
-        int P[n];
-        int C = 0, R = 0;
-        for (int i = 1; i < n - 1; i++) {
-            int i_mirror = 2 * C - i; // equals to i' = C - (i-C)
-            P[i] = (R > i) ? min(R - i, P[i_mirror]) : 0;
-            // Attempt to expand palindrome centered at i
-            while (T[i + 1 + P[i]] == T[i - 1 - P[i]])
-                P[i]++;
-            // If palindrome centered at i expand past R,
-            // adjust center based on expanded palindrome.
-            if (i + P[i] > R) {
-                C = i;
-                R = i + P[i];
-            }
+    //get the LPS in the original string s
+    string ret;
+    for(int i = lpsCenter - P[lpsCenter] + 1; i <= lpsCenter + P[lpsCenter] -1; i++){
+        if(t[i] != '#'){
+            ret += t[i];
         }
-        // Find the maximum element in P.
-        int max_len = 0;
-        int center_index = 0;
-        for (int i = 1; i < n - 1; i++) {
-            if (P[i] > max_len) {
-                max_len = P[i];
-                center_index = i;
-            }
-        }
-        return s.substr((center_index - 1 - max_len) / 2, max_len);
     }
-};
+    return ret;
+} 
+
+// Add '#' in the original string and return
+string preProcess(string s){
+    string ret;
+    ret += '#'
+    for(int i = 0; i <= s.size()-1; i++){
+        ret += s[i];
+        ret += '#';
+    }
+    return ret;
+}
+
 ```
 
 -------
